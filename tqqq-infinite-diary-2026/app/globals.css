@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Recharts 차트 스타일 */
+@layer components {
+  /* Recharts 텍스트 색상 (축 라벨, 틱 라벨) */
+  .recharts-text {
+    fill: #000000 !important; /* 완전한 검은색 - 라이트 모드 */
+  }
+
+  .dark .recharts-text {
+    fill: #ffffff !important; /* 완전한 흰색 - 다크 모드 */
+  }
+
+  /* Recharts Tooltip 스타일 */
+  .recharts-tooltip-wrapper {
+    z-index: 50;
+  }
+
+  .recharts-tooltip-content {
+    background-color: rgba(255, 255, 255, 0.98) !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .recharts-tooltip-content .recharts-tooltip-label {
+    color: #000000 !important; /* 완전한 검은색 */
+    font-weight: 600 !important;
+  }
+
+  .recharts-tooltip-content .recharts-tooltip-item {
+    color: #000000 !important; /* 완전한 검은색 */
+  }
+
+  .dark .recharts-tooltip-content {
+    background-color: rgba(17, 24, 39, 0.98) !important; /* gray-900 */
+    border: 1px solid #374151 !important; /* gray-700 */
+  }
+
+  .dark .recharts-tooltip-content .recharts-tooltip-label {
+    color: #ffffff !important; /* 완전한 흰색 */
+  }
+
+  .dark .recharts-tooltip-content .recharts-tooltip-item {
+    color: #ffffff !important; /* 완전한 흰색 */
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

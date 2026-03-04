@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(openspec list:*)",
+      "Bash(openspec validate:*)",
+      "Bash(npx create-next-app@latest:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(xargs grep:*)",
+      "Bash(sed:*)",
+      "Bash(grep:*)",
+      "Bash(openspec archive:*)",
+      "Bash(npx openspec:*)",
+      "Bash(rm:*)",
+      "Bash(npx tsc:*)"
+    ]
+  }
+}
