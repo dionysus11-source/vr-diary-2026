@@ -1,5 +1,6 @@
 import { Round, Trade, Symbol } from "@/types"
 import { v4 as uuidv4 } from "uuid"
+import { getKoreanDate } from "@/lib/utils/timezone"
 
 /**
  * 새로운 거래 생성
@@ -15,7 +16,7 @@ export function createTrade(
     id: uuidv4(),
     type,
     symbol,
-    date: date || new Date().toISOString().split("T")[0],
+    date: date || getKoreanDate(),
     price,
     quantity,
     amount: price * quantity,
@@ -91,7 +92,7 @@ export function completeRound(round: Round, sell: Trade): Round {
  */
 export function findRoundByTradeId(rounds: Round[], tradeId: string): Round | undefined {
   return rounds.find((round) =>
-    round.buys.some((buy) => buy.id === tradeId) || round.sell?.id === tradeId
+    round.buys.some((buy) => buy.id === tradeId) || round.sells.some((sell) => sell.id === tradeId)
   )
 }
 

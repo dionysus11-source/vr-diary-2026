@@ -5,6 +5,8 @@ import { Round, TabFilter, CardViewMode, Trade } from "@/types"
 import { loadRounds, addRound, getNextRoundNumber, updateRound } from "@/lib/data/storage"
 import { createRound, createTrade, addBuyToRound, addSellToRound } from "@/lib/data/trades"
 import { calculateStatistics, calculateAdvancedStatistics } from "@/lib/calculations/statistics"
+import { fetchDailyPrices, clearAllPriceCache } from "@/lib/api/stockPrices"
+import { getKoreanDate } from "@/lib/utils/timezone"
 import { TabNavigation } from "@/components/ui/TabNavigation"
 import { RoundCard } from "@/components/ui/RoundCard"
 import { RoundDetailModal } from "@/components/ui/RoundDetailModal"
@@ -43,7 +45,27 @@ export default function Home() {
       setLoading(true)
       setError(null)
       const data = await loadRounds()
-      setRounds(data)
+
+      // 진행중인 회차들의 현재 가격 업데이트
+      const activeRounds = data.filter(r => r.status === "active")
+      for (const round of activeRounds) {
+        try {
+          // 최신 종가 가져오기
+          const today = getKoreanDate()
+          const prices = await fetchDailyPrices(round.symbol, round.buys[0].date, today)
+          if (prices.length > 0) {
+            const latestPrice = prices[prices.length - 1].close
+            // currentPrice 업데이트를 위해 updateRound 호출
+            await updateRound(round.id, { currentPrice: latestPrice })
+          }
+        } catch (err) {
+          console.error(`회차 #${round.roundNumber} 현재 가격 업데이트 실패:`, err)
+        }
+      }
+
+      // 업데이트된 데이터 다시 로드
+      const updatedData = await loadRounds()
+      setRounds(updatedData)
     } catch (err) {
       setError(err instanceof Error ? err.message : "데이터 로딩에 실패했습니다")
     } finally {
@@ -52,6 +74,14 @@ export default function Home() {
   }
 
   useEffect(() => {
+    // 한국시간 기반 날짜 매칭 변경으로 인해 캐시 삭제 (일회성)
+    const cacheCleanupFlag = localStorage.getItem("cache_cleanup_v1")
+    if (!cacheCleanupFlag) {
+      clearAllPriceCache()
+      localStorage.setItem("cache_cleanup_v1", "completed")
+      console.log("🔄 종가 캐시가 초기화되었습니다")
+    }
+
     loadRoundsData()
   }, [])
 

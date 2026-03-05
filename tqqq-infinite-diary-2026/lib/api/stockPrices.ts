@@ -1,7 +1,21 @@
+import { getKoreanDate } from "@/lib/utils/timezone"
+
 // 주식 종가 데이터 타입
 export interface DailyPrice {
-  date: string // YYYY-MM-DD
+  date: string // YYYY-MM-DD (한국시간 기준)
   close: number // 종가
+}
+
+/**
+ * 미국 시장 날짜를 한국시간 날짜로 변환합니다.
+ * 한국시간과 미국 시장 날짜를 1:1로 매칭합니다.
+ *
+ * @param usMarketDate 미국 시장 기준 날짜 (YYYY-MM-DD)
+ * @returns 한국시간 기준 날짜 (YYYY-MM-DD)
+ */
+function usMarketDateToKoreanDate(usMarketDate: string): string {
+  // 한국시간과 미국 시장 날짜를 동일하게 처리
+  return usMarketDate
 }
 
 // API 응답 캐시 타입
@@ -9,11 +23,12 @@ interface PriceCache {
   data: DailyPrice[]
   timestamp: number
   symbol: string
+  cacheDate: string // 캐시된 날짜 (한국시간 YYYY-MM-DD)
 }
 
 // 캐시 저장소 키
 const CACHE_KEY_PREFIX = "stock_prices_cache_"
-const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24시간
+const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24시간 (백업용)
 
 /**
  * 내부 API를 통해 일별 종가 데이터 가져오기 (Yahoo Finance 기반, API 키 불필요)
@@ -33,9 +48,16 @@ export async function fetchDailyPrices(
     // 캐시된 데이터를 기간에 맞게 필터링
     const filteredData = filterDataByDateRange(cache.data, startDate, endDate)
     if (filteredData.length > 0) {
+      console.log(`📦 캐시된 데이터 사용 (${filteredData.length}개)`)
+      console.log(`📦 캐시 데이터 날짜 범위:`, {
+        처음: filteredData[0]?.date,
+        끝: filteredData[filteredData.length - 1]?.date
+      })
       return filteredData
     }
   }
+
+  console.log(`🌐 API 요청: ${symbol}, ${startDate} ~ ${endDate}`)
 
   try {
     // 더 넓은 범위로 가져오기 (주말/공휴일 대비 + Yahoo Finance 제한 대응)
@@ -60,16 +82,26 @@ export async function fetchDailyPrices(
       throw new Error("잘못된 데이터 형식")
     }
 
-    console.log(`📊 Yahoo Finance에서 ${prices.length}개 데이터 가져옴`, {
-      요청범위: `${paddedStart.toISOString().split("T")[0]} ~ ${paddedEnd.toISOString().split("T")[0]}`,
-      실제날짜: prices.map(p => p.date)
-    })
+    console.log(`📊 Yahoo Finance에서 ${prices.length}개 데이터 가져옴`)
+    console.log(`📊 요청 날짜 범위: ${paddedStart.toISOString().split("T")[0]} ~ ${paddedEnd.toISOString().split("T")[0]}`)
+    console.log(`📊 실제 데이터 날짜:`, prices.map(p => ({ 날짜: p.date, 종가: p.close })))
 
-    // 캐시 저장 (전체 데이터)
-    setCachedPrices(symbol, prices)
+    // 한국시간과 미국 시장 날짜를 1:1로 매칭
+    const koreanPrices = prices.map(p => ({
+      ...p,
+      date: usMarketDateToKoreanDate(p.date)
+    }))
+
+    console.log(`📊 한국시간 기준 변환 후:`, koreanPrices.map(p => ({ 날짜: p.date, 종가: p.close })))
+
+    // 캐시 저장 (전체 데이터 - 한국시간 기준)
+    setCachedPrices(symbol, koreanPrices)
 
     // 기간에 맞게 필터링
-    return filterDataByDateRange(prices, startDate, endDate)
+    const filteredData = filterDataByDateRange(koreanPrices, startDate, endDate)
+    console.log(`📊 필터링 후 반환 데이터 (${filteredData.length}개):`, filteredData.map(p => ({ 날짜: p.date, 종가: p.close })))
+
+    return filteredData
   } catch (error) {
     console.error("종가 데이터 가져오기 에러:", error)
     throw error
@@ -89,13 +121,25 @@ function getCachedPrices(symbol: string): PriceCache | null {
 
     const cache: PriceCache = JSON.parse(cached)
 
-    // 캐시 만료 체크
-    const now = Date.now()
-    if (now - cache.timestamp > CACHE_DURATION) {
+    // 한국시간 오늘 날짜 구하기
+    const today = getKoreanDate()
+
+    // 캐시 만료 체크 1: 날짜가 다르면 만료 (자정 기준)
+    if (cache.cacheDate !== today) {
+      console.log(`📅 캐시 만료 (날짜 변경): ${cache.cacheDate} → ${today}`)
       localStorage.removeItem(cacheKey)
       return null
     }
 
+    // 캐시 만료 체크 2: 24시간 경과 (백업용)
+    const now = Date.now()
+    if (now - cache.timestamp > CACHE_DURATION) {
+      console.log(`⏰ 캐시 만료 (24시간 경과)`)
+      localStorage.removeItem(cacheKey)
+      return null
+    }
+
+    console.log(`✅ 캐시 사용됨 (${cache.cacheDate})`)
     return cache
   } catch (error) {
     console.error("캐시 읽기 에러:", error)
@@ -111,12 +155,16 @@ function setCachedPrices(symbol: string, prices: DailyPrice[]): void {
 
   try {
     const cacheKey = `${CACHE_KEY_PREFIX}${symbol}`
+    const today = getKoreanDate()
+
     const cache: PriceCache = {
       data: prices,
       timestamp: Date.now(),
       symbol,
+      cacheDate: today, // 한국시간 오늘 날짜 저장
     }
     localStorage.setItem(cacheKey, JSON.stringify(cache))
+    console.log(`💾 캐시 저장됨 (${today}, ${prices.length}개 데이터)`)
   } catch (error) {
     console.error("캐시 저장 에러:", error)
   }
@@ -150,11 +198,26 @@ export function clearPriceCache(symbol: string): void {
 }
 
 /**
+ * 모든 종가 캐시 삭제 (마이그레이션 후 사용)
+ */
+export function clearAllPriceCache(): void {
+  if (typeof window === "undefined") return
+
+  const keys = Object.keys(localStorage)
+  keys.forEach(key => {
+    if (key.startsWith(CACHE_KEY_PREFIX)) {
+      localStorage.removeItem(key)
+      console.log(`캐시 삭제됨: ${key}`)
+    }
+  })
+}
+
+/**
  * 특정 날짜의 종가 가져오기
  */
 export async function fetchPriceForDate(symbol: string, date: string): Promise<number | null> {
   try {
-    // 주어진 날짜 전후 7일간 데이터 가져오기
+    // 주어진 날짜 전후 7일간 데이터 가져오기 (한국시간 기준)
     const startDate = new Date(date)
     startDate.setDate(startDate.getDate() - 7)
     const endDate = new Date(date)

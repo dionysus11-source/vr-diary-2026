@@ -1,5 +1,7 @@
 import { Database, Round } from "@/types"
 import { updateRoundCalculations } from "@/lib/calculations/rounds"
+import { getKoreanDate } from "@/lib/utils/timezone"
+import { runMigration } from "@/lib/utils/migration"
 
 const DATA_FILE = "/data/database.json"
 
@@ -31,6 +33,16 @@ export async function loadDatabase(): Promise<Database> {
     }
 
     const db: Database = JSON.parse(stored)
+
+    // 한국시간 기반 마이그레이션 실행 (최초 1회)
+    await runMigration()
+
+    // 마이그레이션 후 다시 로드
+    const migratedStored = localStorage.getItem("infinite_buying_db")
+    if (migratedStored && migratedStored !== stored) {
+      return JSON.parse(migratedStored)
+    }
+
     return db
   } catch (error) {
     console.error("Failed to load database:", error)
@@ -187,10 +199,10 @@ export function exportToCSV(rounds: Round[]): string {
     round.symbol,
     round.status === "active" ? "진행중" : "완료",
     round.buys[0]?.date || "",
-    round.sell?.date || "",
+    round.sells.length > 0 ? round.sells[round.sells.length - 1].date : "",
     round.averageBuyPrice.toFixed(2),
-    round.sell?.price.toFixed(2) || "",
-    round.totalQuantity,
+    round.sells.length > 0 ? round.sells[round.sells.length - 1].price.toFixed(2) : "",
+    round.totalBuyQuantity,
     round.totalBuyAmount.toFixed(2),
     round.profitRate?.toFixed(2) || "",
     round.profitAmount?.toFixed(2) || "",

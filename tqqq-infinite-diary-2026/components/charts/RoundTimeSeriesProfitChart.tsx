@@ -15,7 +15,6 @@ import {
   ReferenceLine,
   Area,
   ComposedChart,
-  Legend,
 } from "recharts"
 
 interface RoundTimeSeriesProfitChartProps {
@@ -83,7 +82,7 @@ export function RoundTimeSeriesProfitChart({ round }: RoundTimeSeriesProfitChart
           }
 
           // 매수일의 데이터가 없으면 가장 가까운 날짜의 가격 사용
-          // 시차 보정: 한국 시간 오후/밤에 입력하면 미국 시간으로는 전날이 될 수 있음
+          // 모든 날짜는 한국시간 기준으로 변환되어 있음
           const previousPrice = prices
             .filter(p => p.date <= date)
             .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0]
@@ -95,7 +94,7 @@ export function RoundTimeSeriesProfitChart({ round }: RoundTimeSeriesProfitChart
           // 더 가까운 날짜 선택
           const price = previousPrice?.close || nextPrice?.close || round.averageBuyPrice
 
-          console.log(`⚠️ ${date} 데이터 없음 → ${previousPrice?.date || nextPrice?.date || '평단가'} 사용`)
+          console.log(`⚠️ ${date} (한국시간) 데이터 없음 → ${previousPrice?.date || nextPrice?.date || '평단가'} 사용`)
 
           return { date, close: price }
         })
@@ -282,7 +281,7 @@ export function RoundTimeSeriesProfitChart({ round }: RoundTimeSeriesProfitChart
             <YAxis
               yAxisId="rate"
               orientation="right"
-              label={{ value: "수익률 (%)", angle: 90, position: "insideRight", fill: "#000000" }}
+              label={{ value: "수익률", angle: 90, position: "insideRight", fill: "#000000" }}
               className="text-sm text-black dark:text-white"
               tick={{ fill: "#000000" }}
               domain={["auto", "auto"]}
@@ -293,7 +292,7 @@ export function RoundTimeSeriesProfitChart({ round }: RoundTimeSeriesProfitChart
                   const data = payload[0].payload as ChartData
                   return (
                     <div className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
-                      <p className="text-sm font-semibold mb-2">{data.dateDisplay}</p>
+                      <p className="text-sm font-semibold mb-2">{data.dateDisplay} (한국시간)</p>
                       <p className="text-xs">
                         <span className="text-gray-600 dark:text-gray-400">
                           {data.event === "매도" ? "매도가" : "종가"}:{" "}
@@ -327,7 +326,6 @@ export function RoundTimeSeriesProfitChart({ round }: RoundTimeSeriesProfitChart
                 return null
               }}
             />
-            <Legend />
             <ReferenceLine
               yAxisId="rate"
               y={0}

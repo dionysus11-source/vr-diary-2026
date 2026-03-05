@@ -6,6 +6,7 @@ import { createTrade, createRound } from "@/lib/data/trades"
 import { Button } from "@/components/ui/Button"
 import { tradeInputSchema } from "@/lib/validations/schemas"
 import { ZodError } from "zod"
+import { getKoreanDate } from "@/lib/utils/timezone"
 
 interface TradeInputFormProps {
   onSubmit: (trade: any) => void
@@ -18,7 +19,7 @@ export function TradeInputForm({ onSubmit, onCancel }: TradeInputFormProps) {
   const [tradeType, setTradeType] = useState<TradeType>("buy")
   const [price, setPrice] = useState("")
   const [quantity, setQuantity] = useState("")
-  const [date, setDate] = useState(new Date().toISOString().split("T")[0])
+  const [date, setDate] = useState(getKoreanDate())
   const [error, setError] = useState<string | null>(null)
 
   const symbols: Symbol[] = ["TQQQ", "SOXL"]
@@ -189,7 +190,9 @@ export function TradeInputForm({ onSubmit, onCancel }: TradeInputFormProps) {
               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               autoFocus
             />
-            <p className="text-xs text-black dark:text-white mt-1">엔터를 누르면 제출합니다</p>
+            <p className="text-xs text-black dark:text-white mt-1">
+              엔터를 누르면 제출합니다 (한국시간 기준)
+            </p>
           </div>
         )}
       </div>
