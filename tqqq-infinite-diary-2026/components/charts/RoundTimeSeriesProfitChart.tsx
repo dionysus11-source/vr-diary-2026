@@ -15,6 +15,7 @@ import {
   ReferenceLine,
   Area,
   ComposedChart,
+  Legend,
 } from "recharts"
 
 interface RoundTimeSeriesProfitChartProps {
@@ -27,6 +28,8 @@ interface ChartData {
   closePrice: number
   averageBuyPrice: number // 해당 시점까지의 평단가
   profitRate: number
+  positiveProfitRate: number // 양수 수익률만 (음수는 0)
+  negativeProfitRate: number // 음수 수익률만 (양수는 0)
   profitAmount: number
   event?: string
 }
@@ -167,6 +170,8 @@ export function RoundTimeSeriesProfitChart({ round }: RoundTimeSeriesProfitChart
             closePrice: actualPrice, // 실제 매도가 또는 종가
             averageBuyPrice: averageBuyPriceAtDate,
             profitRate,
+            positiveProfitRate: profitRate > 0 ? profitRate : 0,
+            negativeProfitRate: profitRate < 0 ? profitRate : 0,
             profitAmount,
             event,
           }
@@ -230,7 +235,7 @@ export function RoundTimeSeriesProfitChart({ round }: RoundTimeSeriesProfitChart
     )
   }
 
-  // 수익률 색상 (마지막 데이터 기준)
+  // 수익률 색상 (마지막 데이터 기준) - Legend용
   const lastProfitRate = chartData[chartData.length - 1]?.profitRate || 0
   const areaColor = getProfitColor(lastProfitRate)
 
@@ -334,9 +339,16 @@ export function RoundTimeSeriesProfitChart({ round }: RoundTimeSeriesProfitChart
             />
             <Area
               yAxisId="rate"
-              dataKey="profitRate"
-              fill={areaColor}
-              fillOpacity={0.1}
+              dataKey="negativeProfitRate"
+              fill="#ef4444"
+              fillOpacity={0.15}
+              stroke="none"
+            />
+            <Area
+              yAxisId="rate"
+              dataKey="positiveProfitRate"
+              fill="#10b981"
+              fillOpacity={0.15}
               stroke="none"
             />
             <Line
@@ -357,15 +369,7 @@ export function RoundTimeSeriesProfitChart({ round }: RoundTimeSeriesProfitChart
               dot={true}
               name="평단가"
             />
-            <Line
-              yAxisId="rate"
-              type="monotone"
-              dataKey="profitRate"
-              stroke={areaColor}
-              strokeWidth={2}
-              dot={false}
-              name="수익률"
-            />
+            <Legend />
           </ComposedChart>
         </ResponsiveContainer>
       </div>
