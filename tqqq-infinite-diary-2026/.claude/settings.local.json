@@ -12,7 +12,28 @@
       "Bash(openspec archive:*)",
       "Bash(npx openspec:*)",
       "Bash(rm:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(openspec show:*)",
+      "Bash(obsidian search:*)",
+      "Bash(obsidian version:*)",
+      "Bash(obsidian help:*)",
+      "Bash(obsidian tasks:*)",
+      "Bash(obsidian daily:append content=\"- [ ] tqqq, soxl 무한 매수 구매\")",
+      "Bash(obsidian daily:path)",
+      "Bash(powershell -Command \"\\(Get-Content 'add_daily_tqqq_task.ps1' -Raw\\) | Out-File 'add_daily_tqqq_task_temp.ps1' -Encoding UTF8\")",
+      "Bash(mv add_daily_tqqq_task.ps1 add_daily_tqqq_task.ps1.bak && mv add_daily_tqqq_task_temp.ps1 add_daily_tqqq_task.ps1)",
+      "Bash(powershell -ExecutionPolicy Bypass -File add_daily_tqqq_task.ps1)",
+      "Bash(obsidian daily:read)",
+      "Bash(powershell -Command \"\\(Get-Content 'add_daily_tqqq_task.ps1' -Raw\\) | Out-File 'add_daily_tqqq_task_temp.ps1' -Encoding UTF8\" && mv add_daily_tqqq_task.ps1 add_daily_tqqq_task.ps1.bak2 && mv add_daily_tqqq_task_temp.ps1 add_daily_tqqq_task.ps1)",
+      "Bash(obsidian daily:append content=\"- [ ] Command injection 테스트\")",
+      "Bash(powershell.exe -Command \"obsidian tasks daily\")",
+      "Bash(powershell.exe -Command \"obsidian daily:read\")",
+      "Bash(powershell.exe -Command \"obsidian read path=daily\")",
+      "Bash(powershell.exe -Command \"obsidian eval code='app.workspace.getActiveFile\\(\\)?.path'\")",
+      "Bash(powershell.exe -Command \"obsidian help daily\")",
+      "Bash(powershell.exe -Command \"obsidian write path='01_Project/01.2 데일리노트/2026-03-12.md' content='- [x] TQQQ Infinite Buy Task\\\\n- [x] Command injection 테스트'\")",
+      "Bash(powershell.exe -Command \"obsidian vault\")",
+      "Bash(powershell.exe -Command \"obsidian tasks\")"
     ]
   }
 }

@@ -1,0 +1,4 @@
+type,date,rate,amount_usd,amount_krw,purpose,note
+exchange,2026-03-01,1400.0,500.0,700000.0,,
+exchange,2026-03-05,1500.0,500.0,750000.0,,
+usage,2026-03-10,0,400.0,0,테스트 사용,

@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(openspec list:*)",
+      "Bash(cd /c/Users/dionysus11/Documents/Github/tqqq-vr-diary-2026/tqqq-infinite-diary-2026 && openspec show exchange-rate-tracker --type spec)",
+      "WebSearch",
+      "Bash(cd /c/Users/dionysus11/Documents/Github/tqqq-vr-diary-2026/tqqq-infinite-diary-2026 && mkdir -p openspec/changes/add-value-rebalancing-cli/specs/value-rebalancing-cli)",
+      "Bash(cd /c/Users/dionysus11/Documents/Github/tqqq-vr-diary-2026/tqqq-infinite-diary-2026 && openspec validate add-value-rebalancing-cli --strict)",
+      "Bash(python -c \"from calculator import ValueCalculator; calc = ValueCalculator\\(\\); result = calc.calculate_value2\\(100000, 50000, 100000\\); print\\('V2 result:', result\\); signal, rate = calc.determine_signal\\(100000, result\\); print\\('Signal:', signal\\); print\\('Change rate:', rate\\)\")",
+      "Bash(python -c \"from data_manager import DataManager; dm = DataManager\\(\\); print\\('DataManager initialized'\\); print\\('Has records:', dm.has_records\\(\\)\\); print\\('Has initial portfolio:', dm.has_initial_portfolio\\(\\)\\)\")",
+      "Bash(python -c \"from simulator import Week5PurchaseSimulator; sim = Week5PurchaseSimulator\\(\\); results = sim.simulate\\(10000, 45.32, 100, 50000, [10, -10]\\); print\\('Simulation completed'\\); print\\('Scenarios:', list\\(results.keys\\(\\)\\)\\)\")",
+      "Bash(python -c \"from price_cache_manager import PriceCacheManager; pcm = PriceCacheManager\\(\\); print\\('PriceCacheManager initialized'\\); print\\('Has prices:', pcm.has_prices\\(\\)\\); from models.price_cache import PriceCache; from datetime import datetime; pc = PriceCache\\('2026-03-14', 45.32, datetime.now\\(\\).isoformat\\(\\), 'Manual'\\); pcm.save_price\\(pc\\); print\\('Has prices after save:', pcm.has_prices\\(\\)\\)\")",
+      "Bash(python -c \"import main; print\\('Main module imported successfully'\\); cli = main.ValueRebalancingCLI\\(\\); print\\('CLI initialized successfully'\\)\")",
+      "Bash(python test_portfolio.py)",
+      "Bash(python value_rebalancing/test_system.py)",
+      "Bash(python test_system.py)",
+      "Bash(python value_rebalancing/test_correct.py)",
+      "Bash(python test_correct.py)",
+      "Bash(cd \"C:\\\\Users\\\\dionysus11\\\\Documents\\\\Github\\\\tqqq-vr-diary-2026\\\\tqqq-infinite-diary-2026\\\\vr_record\\\\value_rebalancing\" && python main.py --version 2>&1 | head -5)",
+      "Bash(cd \"C:\\\\Users\\\\dionysus11\\\\Documents\\\\Github\\\\tqqq-vr-diary-2026\\\\tqqq-infinite-diary-2026\\\\vr_record\\\\value_rebalancing\" && python -c \"from main import ValueRebalancingCLI; print\\('Import successful'\\)\")",
+      "Bash(cd \"C:\\\\Users\\\\dionysus11\\\\Documents\\\\Github\\\\tqqq-vr-diary-2026\\\\tqqq-infinite-diary-2026\\\\vr_record\\\\value_rebalancing\" && python test_fixes.py)",
+      "Bash(cd \"C:\\\\Users\\\\dionysus11\\\\Documents\\\\Github\\\\tqqq-vr-diary-2026\\\\tqqq-infinite-diary-2026\\\\vr_record\\\\value_rebalancing\" && rm test_fixes.py)",
+      "Bash(cd \"C:\\\\Users\\\\dionysus11\\\\Documents\\\\Github\\\\tqqq-vr-diary-2026\\\\tqqq-infinite-diary-2026\\\\vr_record\\\\value_rebalancing\" && rm verify_calculation.py)",
+      "Bash(python -c \"\nfrom price_cache_manager import PriceCacheManager\ncache = PriceCacheManager\\(\\)\ncache.clear_cache\\(\\)\nprint\\('캐시 삭제 완료'\\)\n\")",
+      "Bash(cd \"C:\\\\Users\\\\dionysus11\\\\Documents\\\\Github\\\\tqqq-vr-diary-2026\\\\tqqq-infinite-diary-2026\\\\vr_record\\\\value_rebalancing\" && python main.py)"
+    ]
+  }
+}

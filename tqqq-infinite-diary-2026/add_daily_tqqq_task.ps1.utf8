@@ -1,0 +1,36 @@
+﻿# TQQQ Infinite Buy Daily Task Auto-Add PowerShell Script
+# Runs Monday through Friday only
+
+Write-Host "=== TQQQ Infinite Buy Task Auto-Add ===" -ForegroundColor Cyan
+Write-Host "Run time: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+
+# Check day of week (1=Mon, 7=Sun)
+$dayOfWeek = (Get-Date).DayOfWeek.value__
+Write-Host "Today: $dayOfWeek (1=Mon, 7=Sun)"
+
+# Check if Monday(1) to Friday(5)
+if ($dayOfWeek -ge 1 -and $dayOfWeek -le 5) {
+    Write-Host "Weekday detected - adding TQQQ task..." -ForegroundColor Green
+
+    # Task content
+    $taskContent = "- [ ] TQQQ Infinite Buy Task"
+
+    # Add task using daily:append (no need to get path separately)
+    $result = obsidian daily:append content="$taskContent" 2>&1
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "Task added successfully!" -ForegroundColor Green
+
+        # Verify added tasks
+        Write-Host "`nCurrent tasks:" -ForegroundColor Yellow
+        obsidian tasks daily
+    } else {
+        Write-Host "Failed to add task." -ForegroundColor Red
+        Write-Host "Error: $result" -ForegroundColor Red
+        exit 1
+    }
+} else {
+    Write-Host "Weekend - no task added." -ForegroundColor Yellow
+}
+
+Write-Host "`nScript completed." -ForegroundColor Cyan
+
