@@ -234,3 +234,72 @@ export function downloadCSV(rounds: Round[], filename: string = "rounds.csv"): v
     document.body.removeChild(link)
   }
 }
+
+/**
+ * JSON 백업 파일 생성 및 다운로드
+ */
+export function downloadJSONBackup(): void {
+  if (typeof window === "undefined") {
+    return
+  }
+
+  try {
+    const stored = localStorage.getItem("infinite_buying_db")
+    if (!stored) {
+      throw new Error("백업할 데이터가 없습니다")
+    }
+
+    const db: Database = JSON.parse(stored)
+    const backupData = {
+      version: "1.0",
+      exportedAt: new Date().toISOString(),
+      data: db,
+    }
+
+    const json = JSON.stringify(backupData, null, 2)
+    const blob = new Blob([json], { type: "application/json;charset=utf-8;" })
+    const link = document.createElement("a")
+
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob)
+      const timestamp = new Date().toISOString().split("T")[0]
+      link.setAttribute("href", url)
+      link.setAttribute("download", `tqqq-diary-backup-${timestamp}.json`)
+      link.style.visibility = "hidden"
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
+  } catch (error) {
+    console.error("Failed to create backup:", error)
+    throw new Error("백업 파일 생성에 실패했습니다")
+  }
+}
+
+/**
+ * JSON 백업 파일에서 복원
+ */
+export async function restoreFromJSONBackup(file: File): Promise<void> {
+  try {
+    const text = await file.text()
+    const backupData = JSON.parse(text)
+
+    // 백업 파일 형식 검증
+    if (!backupData.version || !backupData.data) {
+      throw new Error("잘못된 백업 파일 형식입니다")
+    }
+
+    // 데이터베이스 구조 검증
+    const db = backupData.data as Database
+    if (!db.rounds || !Array.isArray(db.rounds)) {
+      throw new Error("백업 파일 데이터가 올바르지 않습니다")
+    }
+
+    // localStorage에 저장
+    db.lastUpdated = new Date().toISOString()
+    localStorage.setItem("infinite_buying_db", JSON.stringify(db))
+  } catch (error) {
+    console.error("Failed to restore backup:", error)
+    throw new Error("백업 복원에 실패했습니다")
+  }
+}

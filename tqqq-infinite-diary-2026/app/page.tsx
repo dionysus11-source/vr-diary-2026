@@ -23,6 +23,7 @@ import { DeleteTradeModal } from "@/components/ui/DeleteTradeModal"
 import { StatisticsCards } from "@/components/charts/StatisticsCards"
 import { CumulativeProfitChart } from "@/components/charts/CumulativeProfitChart"
 import { MDDChart } from "@/components/charts/MDDChart"
+import { BackupRestoreModal } from "@/components/ui/BackupRestoreModal"
 
 export default function Home() {
   const [rounds, setRounds] = useState<Round[]>([])
@@ -38,6 +39,7 @@ export default function Home() {
   const [showEditTradeModal, setShowEditTradeModal] = useState(false)
   const [deletingTrade, setDeletingTrade] = useState<Trade | null>(null)
   const [showDeleteTradeModal, setShowDeleteTradeModal] = useState(false)
+  const [showBackupRestoreModal, setShowBackupRestoreModal] = useState(false)
 
   // 회차 데이터 불러오기
   const loadRoundsData = async () => {
@@ -253,6 +255,12 @@ export default function Home() {
     setDeletingTrade(null)
   }
 
+  // 복원 완료 후 핸들러
+  const handleRestoreComplete = async () => {
+    await loadRoundsData()
+    setSelectedRound(null)
+  }
+
   if (loading) {
     return <LoadingState />
   }
@@ -277,6 +285,12 @@ export default function Home() {
             </div>
             <div className="flex gap-2 items-center">
               <ThemeToggle />
+              <Button
+                variant="secondary"
+                onClick={() => setShowBackupRestoreModal(true)}
+              >
+                백업/복원
+              </Button>
               <Button onClick={() => setViewMode(viewMode === "compact" ? "detailed" : "compact")}>
                 {viewMode === "compact" ? "상세 모드" : "간결 모드"}
               </Button>
@@ -418,6 +432,13 @@ export default function Home() {
           trade={deletingTrade}
         />
       )}
+
+      {/* Backup/Restore Modal */}
+      <BackupRestoreModal
+        isOpen={showBackupRestoreModal}
+        onClose={() => setShowBackupRestoreModal(false)}
+        onRestore={handleRestoreComplete}
+      />
     </main>
   )
 }
