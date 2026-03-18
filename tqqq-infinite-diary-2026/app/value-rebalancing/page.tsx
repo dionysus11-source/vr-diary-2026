@@ -10,6 +10,7 @@ import { VRVValueForm } from "@/components/value-rebalancing/VRVValueForm"
 import { VRRoundCard } from "@/components/value-rebalancing/VRRoundCard"
 import { VRBackupRestoreModal } from "@/components/value-rebalancing/VRBackupRestoreModal"
 import { VRRoundDetailModal } from "@/components/value-rebalancing/VRRoundDetailModal"
+import { VRRecommendationModal } from "@/components/value-rebalancing/VRRecommendationModal"
 import { VValueChart } from "@/components/value-rebalancing/charts/VValueChart"
 import { BenchmarkComparisonChart } from "@/components/value-rebalancing/charts/BenchmarkComparisonChart"
 
@@ -20,6 +21,7 @@ export default function ValueRebalancingPage() {
   const [loading, setLoading] = useState(true)
   const [showVValueForm, setShowVValueForm] = useState(false)
   const [showBackupModal, setShowBackupModal] = useState(false)
+  const [showRecommendationModal, setShowRecommendationModal] = useState(false)
   const [selectedRound, setSelectedRound] = useState<VRRound | null>(null)
 
   // 페이지네이션
@@ -158,6 +160,12 @@ export default function ValueRebalancingPage() {
             백업/복원
           </button>
           <button
+            onClick={() => setShowRecommendationModal(true)}
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+          >
+            매수/매도 추천
+          </button>
+          <button
             onClick={() => setShowVValueForm(!showVValueForm)}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
           >
@@ -261,6 +269,16 @@ export default function ValueRebalancingPage() {
       {/* 백업/복원 모달 */}
       {showBackupModal && (
         <VRBackupRestoreModal onClose={() => setShowBackupModal(false)} />
+      )}
+
+      {/* 매수/매도 추천 모달 */}
+      {showRecommendationModal && portfolioStatus && (
+        <VRRecommendationModal
+          vValue={portfolioStatus.vValue}
+          shares={portfolioStatus.shares}
+          pool={portfolioStatus.pool}
+          onClose={() => setShowRecommendationModal(false)}
+        />
       )}
 
       {/* 차수 상세 모달 */}
