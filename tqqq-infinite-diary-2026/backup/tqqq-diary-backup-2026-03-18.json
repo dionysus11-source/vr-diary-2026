@@ -1,0 +1,487 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-03-18T04:34:43.121Z",
+  "data": {
+    "rounds": [
+      {
+        "id": "95db1689-8104-41be-b411-c29d0a7756ff",
+        "roundNumber": 1,
+        "symbol": "SOXL",
+        "status": "completed",
+        "buys": [
+          {
+            "id": "9e65ab69-02c4-4947-bbcd-50143718cd98",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-02-12",
+            "price": 63.1,
+            "quantity": 2,
+            "amount": 126.2
+          },
+          {
+            "id": "56d02bb5-5a73-42e5-af0c-e31ad31f3f7d",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-02-13",
+            "price": 64.59,
+            "quantity": 1,
+            "amount": 64.59
+          },
+          {
+            "id": "0d045348-9709-4961-b32f-0dc5d38cfd79",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-02-17",
+            "price": 63.27,
+            "quantity": 2,
+            "amount": 126.54
+          },
+          {
+            "id": "52062b9e-9ae6-4f8c-a14d-1dcc040023cb",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-02-18",
+            "price": 66.29,
+            "quantity": 1,
+            "amount": 66.29
+          },
+          {
+            "id": "84c6da5b-0710-46f0-af9e-c510da41ff1f",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-02-19",
+            "price": 65.23,
+            "quantity": 1,
+            "amount": 65.23
+          },
+          {
+            "id": "71f96658-5268-49a8-8013-ec3eba54de8e",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-02-20",
+            "price": 67.11,
+            "quantity": 1,
+            "amount": 67.11
+          }
+        ],
+        "averageBuyPrice": 64.495,
+        "totalQuantity": 2,
+        "totalBuyAmount": 515.96,
+        "createdAt": "2026-03-04T01:21:51.671Z",
+        "updatedAt": "2026-03-04T05:29:05.782Z",
+        "sells": [
+          {
+            "id": "c08995e7-ac4a-42b2-93b7-21e7c809ab8a",
+            "type": "sell",
+            "symbol": "SOXL",
+            "date": "2026-02-25",
+            "price": 72.03,
+            "quantity": 2,
+            "amount": 144.06
+          },
+          {
+            "id": "a0bbcce7-bd89-4cfd-9d4e-d599137ec316",
+            "type": "sell",
+            "symbol": "SOXL",
+            "date": "2026-02-25",
+            "price": 72.23,
+            "quantity": 6,
+            "amount": 433.38
+          }
+        ],
+        "totalBuyQuantity": 8,
+        "totalSellQuantity": 8,
+        "remainingQuantity": 0,
+        "totalSellAmount": 577.44,
+        "netSellAmount": 61.48000000000002,
+        "profitAmount": 61.47999999999999,
+        "profitRate": 11.915652376153188,
+        "realizedProfitAmount": 61.47999999999999,
+        "realizedProfitRate": 11.915652376153194
+      },
+      {
+        "id": "de248735-c42b-41df-b727-d7203e93b920",
+        "roundNumber": 2,
+        "symbol": "TQQQ",
+        "status": "active",
+        "buys": [
+          {
+            "id": "b19a7c2d-d513-46bf-965f-9f996c3e5453",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-02-27",
+            "price": 49.64,
+            "quantity": 17,
+            "amount": 843.88
+          },
+          {
+            "id": "e990d9ba-1ff3-42c5-abcb-1fbad95a45b6",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-02-28",
+            "price": 49.52,
+            "quantity": 17,
+            "amount": 841.84
+          },
+          {
+            "id": "c1ed8048-7c09-4cc2-ab48-4dcfba8b9b1e",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-03-03",
+            "price": 49.7,
+            "quantity": 8,
+            "amount": 397.6
+          },
+          {
+            "id": "95facdb1-2f70-45ad-b7b8-267e9a447e6f",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-03-04",
+            "price": 48.1,
+            "quantity": 18,
+            "amount": 865.8000000000001
+          },
+          {
+            "id": "2c1c1d32-e3fa-4390-8868-05ae33f71a50",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-03-05",
+            "price": 50.26,
+            "quantity": 8,
+            "amount": 402.08
+          },
+          {
+            "id": "bb031183-c2dc-4113-a7a3-e0ece8027c8d",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-03-09",
+            "price": 49.06,
+            "quantity": 17,
+            "amount": 834.02
+          },
+          {
+            "id": "090bbb0c-54d4-4f74-8c08-65d054edbd43",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-03-09",
+            "price": 47.62,
+            "quantity": 1,
+            "amount": 47.62
+          },
+          {
+            "id": "dd0b24dd-cd10-4acd-9576-4439a9220639",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-03-06",
+            "price": 49.8,
+            "quantity": 8,
+            "amount": 398.4
+          },
+          {
+            "id": "4bb279b4-6b63-4b38-b8d0-bc582c990f5f",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-03-10",
+            "price": 44.45,
+            "quantity": 2,
+            "amount": 88.9
+          },
+          {
+            "id": "361392ea-3ff9-423d-98ce-f36653135edd",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-03-10",
+            "price": 49.39,
+            "quantity": 8,
+            "amount": 395.12
+          },
+          {
+            "id": "2cf4d1b7-a5d6-4ff3-919a-303e268dcc34",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-03-11",
+            "price": 49.4,
+            "quantity": 8,
+            "amount": 395.2
+          },
+          {
+            "id": "a0b9a07e-e162-4105-aaaf-c2c64a5a3b38",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-03-12",
+            "price": 49.35,
+            "quantity": 8,
+            "amount": 394.8
+          },
+          {
+            "id": "6fcbcf72-516e-4273-a6a1-7cb30bc460f9",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-03-13",
+            "price": 48.2,
+            "quantity": 1,
+            "amount": 48.2
+          },
+          {
+            "id": "3c168984-d332-4749-880f-b7ef71655a8b",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-03-13",
+            "price": 47.81,
+            "quantity": 17,
+            "amount": 812.77
+          },
+          {
+            "id": "e7dedd0f-7091-44d1-a0cb-c814ceeeb2bc",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-03-16",
+            "price": 45.93,
+            "quantity": 17,
+            "amount": 780.81
+          },
+          {
+            "id": "cd918336-17d9-441e-8e63-ee7c62ca7f41",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-03-17",
+            "price": 47.46,
+            "quantity": 17,
+            "amount": 806.82
+          },
+          {
+            "id": "0d735a5c-319f-43c2-b4f3-af7f24c0a582",
+            "type": "buy",
+            "symbol": "TQQQ",
+            "date": "2026-03-18",
+            "price": 48.16,
+            "quantity": 17,
+            "amount": 818.7199999999999
+          }
+        ],
+        "sells": [],
+        "averageBuyPrice": 48.5321693121693,
+        "totalBuyQuantity": 189,
+        "totalSellQuantity": 0,
+        "remainingQuantity": 189,
+        "totalBuyAmount": 9172.579999999998,
+        "totalSellAmount": 0,
+        "netSellAmount": 0,
+        "createdAt": "2026-03-04T01:54:19.258Z",
+        "updatedAt": "2026-03-18T03:44:53.710Z",
+        "profitAmount": -70.34002883910934,
+        "profitRate": -0.7668510804932674,
+        "realizedProfitAmount": 0,
+        "realizedProfitRate": 0,
+        "currentPrice": 48.15999984741211,
+        "unrealizedProfitAmount": -70.34002883910934,
+        "unrealizedProfitRate": -0.7668510804932674,
+        "totalSeedAmount": 34823,
+        "tryAmount": 870.58
+      },
+      {
+        "id": "dc75d5be-89e2-438a-898a-d2204d0246a1",
+        "roundNumber": 3,
+        "symbol": "SOXL",
+        "status": "active",
+        "buys": [
+          {
+            "id": "22a734fb-fa3b-4578-9051-268e2a4f72e8",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-02-27",
+            "price": 63.61,
+            "quantity": 7,
+            "amount": 445.27
+          },
+          {
+            "id": "d9e98af8-0969-40b4-a461-b9f6ed7470e4",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-02-27",
+            "price": 65.34,
+            "quantity": 3,
+            "amount": 196.02
+          },
+          {
+            "id": "38dcc51e-3be9-4036-aac4-0e5552adf952",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-02-28",
+            "price": 62.77,
+            "quantity": 7,
+            "amount": 439.39000000000004
+          },
+          {
+            "id": "1a2cd9d9-aa61-4780-aa68-8d1418819392",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-03-03",
+            "price": 62.76,
+            "quantity": 7,
+            "amount": 439.32
+          },
+          {
+            "id": "71f1580a-466a-4dea-8fcc-7e83f4c44b36",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-03-04",
+            "price": 53.42,
+            "quantity": 9,
+            "amount": 480.78000000000003
+          },
+          {
+            "id": "561b6400-823a-49f9-9d60-658b736d3157",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-03-05",
+            "price": 51.16,
+            "quantity": 9,
+            "amount": 460.43999999999994
+          },
+          {
+            "id": "fb6ed7d4-bce8-4118-8b10-fded681bfc0f",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-03-06",
+            "price": 54.8,
+            "quantity": 8,
+            "amount": 438.4
+          },
+          {
+            "id": "cbd86784-33b6-4f3c-8a1c-c45f362ae8bd",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-03-09",
+            "price": 53.86,
+            "quantity": 8,
+            "amount": 430.88
+          },
+          {
+            "id": "d17a16b4-ce89-488d-9a83-bf530a82d515",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-03-09",
+            "price": 50.52,
+            "quantity": 1,
+            "amount": 50.52
+          },
+          {
+            "id": "c994fb34-673f-4e65-82d8-ed56063acddd",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-03-10",
+            "price": 53.32,
+            "quantity": 8,
+            "amount": 426.56
+          },
+          {
+            "id": "3f9441a0-b6f0-4bad-8616-349fb6527f77",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-03-10",
+            "price": 42.41,
+            "quantity": 3,
+            "amount": 127.22999999999999
+          },
+          {
+            "id": "097bf954-2cd3-425d-9b32-22c72e16601e",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-03-11",
+            "price": 54.59,
+            "quantity": 8,
+            "amount": 436.72
+          },
+          {
+            "id": "23b9105b-c5a1-4c14-8b89-f2d9e22b6b98",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-03-12",
+            "price": 56.09,
+            "quantity": 4,
+            "amount": 224.36
+          },
+          {
+            "id": "5ed0881c-eca4-4f81-a60c-f06829275d85",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-03-12",
+            "price": 53.96,
+            "quantity": 1,
+            "amount": 53.96
+          },
+          {
+            "id": "342cb129-eebe-42bb-a8ed-dbfb895368ba",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-03-13",
+            "price": 54.2,
+            "quantity": 1,
+            "amount": 54.2
+          },
+          {
+            "id": "50e148c0-fa17-42b0-a823-c39cf2134d53",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-03-13",
+            "price": 51.66,
+            "quantity": 8,
+            "amount": 413.28
+          },
+          {
+            "id": "9129d1e1-5f7e-4f06-b93c-2cc96ff1b689",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-03-16",
+            "price": 50.72,
+            "quantity": 8,
+            "amount": 405.76
+          },
+          {
+            "id": "8f4068fc-696d-4274-a9c1-bb6070d5d86f",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-03-17",
+            "price": 53.69,
+            "quantity": 9,
+            "amount": 483.21
+          },
+          {
+            "id": "25d10c2b-a065-4418-8c4e-8e6eae2e6018",
+            "type": "buy",
+            "symbol": "SOXL",
+            "date": "2026-03-18",
+            "price": 54.95,
+            "quantity": 9,
+            "amount": 494.55
+          }
+        ],
+        "sells": [],
+        "averageBuyPrice": 55.09194915254237,
+        "totalBuyQuantity": 118,
+        "totalSellQuantity": 0,
+        "remainingQuantity": 118,
+        "totalBuyAmount": 6500.849999999999,
+        "totalSellAmount": 0,
+        "netSellAmount": 0,
+        "createdAt": "2026-03-04T01:57:49.165Z",
+        "updatedAt": "2026-03-18T03:44:53.710Z",
+        "profitAmount": -16.749909973144128,
+        "profitRate": -0.25765722902611393,
+        "realizedProfitAmount": 0,
+        "realizedProfitRate": 0,
+        "currentPrice": 54.95000076293945,
+        "unrealizedProfitAmount": -16.749909973144128,
+        "unrealizedProfitRate": -0.25765722902611393,
+        "totalSeedAmount": 20000,
+        "tryAmount": 500
+      }
+    ],
+    "symbols": [
+      "TQQQ",
+      "SOXL"
+    ],
+    "lastUpdated": "2026-03-18T03:44:53.710Z"
+  }
+}
