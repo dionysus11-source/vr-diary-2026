@@ -3,6 +3,21 @@ import { addVRRound, addVRTransaction, loadVRRecords, addVRRecord as addRecord, 
 import { ValueRebalancingCalculator } from "@/lib/calculations/vr-calculator"
 
 /**
+ * 차수 활성 상태 계산 (날짜 기반)
+ * @param endDate - 차수 종료일
+ * @returns 활성 상태 (true: 진행중, false: 완료)
+ */
+function calculateRoundActiveStatus(endDate: string): boolean {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0) // 시간 초기화
+
+  const end = new Date(endDate)
+  end.setHours(0, 0, 0, 0)
+
+  return today <= end
+}
+
+/**
  * 리밸런싱 기록 추가 시 차수 자동 계산 및 업데이트
  */
 export async function addVRRecordWithRound(record: VRRecord): Promise<void> {
@@ -33,19 +48,21 @@ export async function addVRRecordWithRound(record: VRRecord): Promise<void> {
 
   if (existingRound) {
     // 기존 차수 업데이트
+    const isActive = calculateRoundActiveStatus(endDate)
     const updatedRound: VRRound = {
       ...existingRound,
       finalShares: record.shares,
       finalPool: record.pool,
       sharesChange: record.shares - existingRound.initialShares,
       poolChange: record.pool - existingRound.initialPool,
-      isActive: true, // 아직 진행중
+      isActive,
       updatedAt: new Date().toISOString(),
     }
 
     await addVRRound(updatedRound)
   } else {
     // 새 차수 생성
+    const isActive = calculateRoundActiveStatus(endDate)
     const newRound: VRRound = {
       roundId,
       roundNumber,
@@ -58,7 +75,7 @@ export async function addVRRecordWithRound(record: VRRecord): Promise<void> {
       sharesChange: 0, // 첫 기록이므로 변화 없음
       poolChange: 0,
       transactions: [],
-      isActive: true,
+      isActive,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     }
@@ -186,6 +203,23 @@ export async function deleteVRTransaction(transactionId: string): Promise<void> 
     round.poolChange = currentPool - round.initialPool
     round.transactions = roundTransactions
     round.updatedAt = new Date().toISOString()
+  }
+
+  await saveVRDatabase(db)
+}
+
+/**
+ * 모든 차수의 활성 상태 업데이트 (날짜 기반 자동 계산)
+ */
+export async function updateAllRoundsActiveStatus(): Promise<void> {
+  const db = await loadVRDatabase()
+
+  for (const round of db.rounds) {
+    const isActive = calculateRoundActiveStatus(round.endDate)
+    if (round.isActive !== isActive) {
+      round.isActive = isActive
+      round.updatedAt = new Date().toISOString()
+    }
   }
 
   await saveVRDatabase(db)

@@ -9,10 +9,12 @@ import { addVRRecordWithRound } from "@/lib/data/vr-round-manager"
 interface VRVValueFormProps {
   initialPortfolio: VRInitialPortfolio
   previousRecord: { vValue: number; shares: number; pool: number } | null
+  rounds: any[]
+  portfolioStatus: any
   onComplete: () => void
 }
 
-export function VRVValueForm({ initialPortfolio, previousRecord, onComplete }: VRVValueFormProps) {
+export function VRVValueForm({ initialPortfolio, previousRecord, rounds, portfolioStatus, onComplete }: VRVValueFormProps) {
   // 첫번째 레코드인 경우 초기 포트폴리오 값 사용, 이후에는 이전 레코드 값 사용
   const [date, setDate] = useState(new Date().toISOString().split("T")[0])
   const [price, setPrice] = useState("")
@@ -22,8 +24,25 @@ export function VRVValueForm({ initialPortfolio, previousRecord, onComplete }: V
   const [pool, setPool] = useState(
     previousRecord?.pool.toString() || initialPortfolio.initialCash.toString()
   )
+  const [selectedRoundId, setSelectedRoundId] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState("")
+
+  const handleRoundSelect = (roundId: string) => {
+    if (roundId === "") {
+      // 선택 안 함: 현재 포트폴리오 상태 사용
+      setShares(portfolioStatus?.shares?.toString() || initialPortfolio.initialShares.toString())
+      setPool(portfolioStatus?.pool?.toString() || initialPortfolio.initialCash.toString())
+    } else {
+      // 차수 선택: 해당 차수의 최종 값 사용
+      const selectedRound = rounds.find((r) => r.roundId === roundId)
+      if (selectedRound) {
+        setShares(selectedRound.finalShares.toString())
+        setPool(selectedRound.finalPool.toFixed(2))
+      }
+    }
+    setSelectedRoundId(roundId)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -128,6 +147,30 @@ export function VRVValueForm({ initialPortfolio, previousRecord, onComplete }: V
             required
           />
         </div>
+
+        {/* 차수 선택 (선택사항) */}
+        {rounds.length > 0 && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              차수에서 값 불러오기 (선택사항)
+            </label>
+            <select
+              value={selectedRoundId}
+              onChange={(e) => handleRoundSelect(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+            >
+              <option value="">현재 포트폴리오 상태 사용</option>
+              {rounds.map((round) => (
+                <option key={round.roundId} value={round.roundId}>
+                  {round.roundId} ({round.startDate} ~ {round.endDate})
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              차수를 선택하면 해당 차수의 최종 주식수와 현금이 자동으로 입력됩니다.
+            </p>
+          </div>
+        )}
 
         {/* TQQQ 종가 */}
         <div>

@@ -33,7 +33,7 @@ export function VRRoundDetailModal({ round, onClose, onRefresh, onUpdate }: VRRo
     poolChange,
     transactions,
     isActive,
-  } = round
+  } = currentRound
 
   // 종가를 50으로 가정 (실제로는 전달받아야 함)
   const currentPrice = 50
@@ -114,8 +114,16 @@ export function VRRoundDetailModal({ round, onClose, onRefresh, onUpdate }: VRRo
         onRefresh()
       }
 
-      // 모달 닫기
-      onClose()
+      // 업데이트된 차수 정보 가져오기
+      const { getVRRound } = require("@/lib/data/vr-storage")
+      const updatedRound = await getVRRound(roundId)
+
+      if (updatedRound) {
+        setCurrentRound(updatedRound)
+        if (onUpdate) {
+          onUpdate(updatedRound)
+        }
+      }
     } catch (err) {
       alert(err instanceof Error ? err.message : "거래 삭제에 실패했습니다.")
     }

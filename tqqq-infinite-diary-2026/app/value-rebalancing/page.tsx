@@ -33,6 +33,10 @@ export default function ValueRebalancingPage() {
   const loadData = async () => {
     console.log('=== Loading data ===')
     try {
+      // 모든 차수의 활성 상태 업데이트 (날짜 기반 자동 계산)
+      const { updateAllRoundsActiveStatus } = require("@/lib/data/vr-round-manager")
+      await updateAllRoundsActiveStatus()
+
       const [portfolio, recordList, roundList] = await Promise.all([
         getInitialPortfolio(),
         loadVRRecords(),
@@ -168,6 +172,8 @@ export default function ValueRebalancingPage() {
           <VRVValueForm
             initialPortfolio={initialPortfolio}
             previousRecord={previousRecord}
+            rounds={rounds}
+            portfolioStatus={portfolioStatus}
             onComplete={handleVValueFormComplete}
           />
         </div>
@@ -263,6 +269,7 @@ export default function ValueRebalancingPage() {
           round={selectedRound}
           onClose={() => setSelectedRound(null)}
           onRefresh={() => loadData()}
+          onUpdate={(updatedRound) => setSelectedRound(updatedRound)}
         />
       )}
     </div>
