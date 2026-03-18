@@ -12,6 +12,8 @@ export interface V22GuideInfo {
   sellPoint: number
   locAverageQuantity: number
   locStarQuantity: number
+  quarterSellShares: number
+  remainingSellShares: number
 }
 
 /**
@@ -92,6 +94,10 @@ export function getV22GuideInfo(round: Round): V22GuideInfo {
   const locAverageQuantity = Math.ceil(baseQuantity / 2) // 올림 처리
   const locStarQuantity = Math.floor(baseQuantity / 2) // 버림 처리
 
+  // 매도 수량 계산 (전체 수량의 25%와 나머지 75%)
+  const quarterSellShares = Math.floor(round.remainingQuantity / 4)
+  const remainingSellShares = round.remainingQuantity - quarterSellShares
+
   return {
     tryAmount,
     tValue,
@@ -101,7 +107,9 @@ export function getV22GuideInfo(round: Round): V22GuideInfo {
     buyPoint,
     sellPoint,
     locAverageQuantity,
-    locStarQuantity
+    locStarQuantity,
+    quarterSellShares,
+    remainingSellShares
   }
 }
 

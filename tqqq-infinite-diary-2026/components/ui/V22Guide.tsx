@@ -10,7 +10,7 @@ interface V22GuideProps {
 
 export function V22Guide({ round }: V22GuideProps) {
   const guideInfo = getV22GuideInfo(round)
-  const { state, tValue, starPercentage, tryAmount, averagePrice, buyPoint, sellPoint, locAverageQuantity, locStarQuantity } = guideInfo
+  const { state, tValue, starPercentage, tryAmount, averagePrice, buyPoint, sellPoint, locAverageQuantity, locStarQuantity, quarterSellShares, remainingSellShares } = guideInfo
   const { remainingQuantity } = round
 
   if (round.status === "completed" || remainingQuantity === 0) {
@@ -192,7 +192,7 @@ export function V22Guide({ round }: V22GuideProps) {
                   <span className="text-gray-400 text-xs">전체 수량의 25%</span>
                 </div>
                 <div className="text-lg font-bold">
-                  {formatPrice(sellPoint)}
+                  {formatPrice(sellPoint)} <span className="text-sm font-medium text-blue-600">× {quarterSellShares}주</span>
                 </div>
               </div>
               <div className="bg-white dark:bg-gray-800 p-3 rounded border border-gray-100 dark:border-gray-700 shadow-sm">
@@ -201,7 +201,7 @@ export function V22Guide({ round }: V22GuideProps) {
                   <span className="text-gray-400 text-xs">나머지 75%</span>
                 </div>
                 <div className="text-lg font-bold">
-                  {formatPrice(applyPercentage(averagePrice, 10))}
+                  {formatPrice(applyPercentage(averagePrice, 10))} <span className="text-sm font-medium text-blue-600">× {remainingSellShares}주</span>
                 </div>
               </div>
             </div>
@@ -211,7 +211,7 @@ export function V22Guide({ round }: V22GuideProps) {
             <div className="space-y-3">
               <div className="bg-white dark:bg-gray-800 p-3 rounded border border-red-200 shadow-sm">
                 <div className="text-xs text-red-600 mb-1 font-bold">1/4 시장가(MOC) 즉시 손절</div>
-                <div className="text-sm">현재 보유량의 25%인 <span className="font-bold text-red-700">{Math.floor(remainingQuantity / 4)}주</span>를 시장가 매도하여 현금 확보</div>
+                <div className="text-sm">현재 보유량의 25%인 <span className="font-bold text-red-700">{quarterSellShares}주</span>를 시장가 매도하여 현금 확보</div>
               </div>
               <div className="bg-white dark:bg-gray-800 p-3 rounded border border-gray-100 dark:border-gray-700 shadow-sm mt-3">
                 <div className="text-xs text-blue-500 mb-1 font-semibold flex items-center justify-between">
@@ -219,7 +219,7 @@ export function V22Guide({ round }: V22GuideProps) {
                   <span className="text-gray-400 text-xs">남은 수량의 25%</span>
                 </div>
                 <div className="text-lg font-bold">
-                  {formatPrice(sellPoint)}
+                  {formatPrice(sellPoint)} <span className="text-sm font-medium text-blue-600">× {Math.floor(remainingSellShares / 4)}주</span>
                 </div>
               </div>
               <div className="bg-white dark:bg-gray-800 p-3 rounded border border-gray-100 dark:border-gray-700 shadow-sm">
@@ -228,7 +228,7 @@ export function V22Guide({ round }: V22GuideProps) {
                   <span className="text-gray-400 text-xs">나머지 전체</span>
                 </div>
                 <div className="text-lg font-bold">
-                  {formatPrice(applyPercentage(averagePrice, 10))}
+                  {formatPrice(applyPercentage(averagePrice, 10))} <span className="text-sm font-medium text-blue-600">× {remainingSellShares - Math.floor(remainingSellShares / 4)}주</span>
                 </div>
               </div>
             </div>
