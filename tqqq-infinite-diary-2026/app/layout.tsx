@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import "./globals.css"
+import { Sidebar } from "@/components/layout/Sidebar"
 
 export const metadata: Metadata = {
   title: "무한 매수 다이어리 2026",
@@ -14,7 +15,12 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <body className="antialiased">
-        {children}
+        <div className="flex">
+          <Sidebar />
+          <main className="flex-1 ml-64 transition-all duration-300">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   )

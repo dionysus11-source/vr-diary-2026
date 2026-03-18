@@ -33,7 +33,8 @@
       "Bash(powershell.exe -Command \"obsidian help daily\")",
       "Bash(powershell.exe -Command \"obsidian write path='01_Project/01.2 데일리노트/2026-03-12.md' content='- [x] TQQQ Infinite Buy Task\\\\n- [x] Command injection 테스트'\")",
       "Bash(powershell.exe -Command \"obsidian vault\")",
-      "Bash(powershell.exe -Command \"obsidian tasks\")"
+      "Bash(powershell.exe -Command \"obsidian tasks\")",
+      "Bash(cd \"C:\\\\Users\\\\dionysus11\\\\Documents\\\\Github\\\\tqqq-vr-diary-2026\\\\tqqq-infinite-diary-2026\" && rm -rf .next && npm run build)"
     ]
   }
 }
