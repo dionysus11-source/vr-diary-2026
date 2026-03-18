@@ -34,7 +34,9 @@
       "Bash(powershell.exe -Command \"obsidian write path='01_Project/01.2 데일리노트/2026-03-12.md' content='- [x] TQQQ Infinite Buy Task\\\\n- [x] Command injection 테스트'\")",
       "Bash(powershell.exe -Command \"obsidian vault\")",
       "Bash(powershell.exe -Command \"obsidian tasks\")",
-      "Bash(cd \"C:\\\\Users\\\\dionysus11\\\\Documents\\\\Github\\\\tqqq-vr-diary-2026\\\\tqqq-infinite-diary-2026\" && rm -rf .next && npm run build)"
+      "Bash(cd \"C:\\\\Users\\\\dionysus11\\\\Documents\\\\Github\\\\tqqq-vr-diary-2026\\\\tqqq-infinite-diary-2026\" && rm -rf .next && npm run build)",
+      "Bash(cd \"C:\\\\Users\\\\dionysus11\\\\Documents\\\\Github\\\\tqqq-vr-diary-2026\\\\tqqq-infinite-diary-2026\" && sed -i 's/`\\\\${x}%,\\\\${y}%`/`${x},${y}`/g' components/value-rebalancing/charts/BenchmarkComparisonChart.tsx && sed -i 's/strokeWidth=\"3\"/strokeWidth=\"0.8\"/g' components/value-rebalancing/charts/BenchmarkComparisonChart.tsx && sed -i 's/strokeWidth=\"2\"/strokeWidth=\"0.5\"/g' components/value-rebalancing/charts/BenchmarkComparisonChart.tsx && sed -i 's/r=\"4\"/r=\"1.5\"/g' components/value-rebalancing/charts/BenchmarkComparisonChart.tsx)",
+      "Bash(cd \"C:\\\\Users\\\\dionysus11\\\\Documents\\\\Github\\\\tqqq-vr-diary-2026\\\\tqqq-infinite-diary-2026\" && sed -i 's/r=\"1\\\\.5\"/r=\"3\"/g' components/value-rebalancing/charts/BenchmarkComparisonChart.tsx && sed -i 's/strokeWidth=\"0\\\\.5\"/strokeWidth=\"2\"/g' components/value-rebalancing/charts/BenchmarkComparisonChart.tsx && sed -i 's/width=\"8\"/width=\"6\"/g' components/value-rebalancing/charts/BenchmarkComparisonChart.tsx && sed -i 's/height=\"8\"/height=\"6\"/g' components/value-rebalancing/charts/BenchmarkComparisonChart.tsx)"
     ]
   }
 }
