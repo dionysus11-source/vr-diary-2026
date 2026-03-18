@@ -24,6 +24,7 @@ import { StatisticsCards } from "@/components/charts/StatisticsCards"
 import { CumulativeProfitChart } from "@/components/charts/CumulativeProfitChart"
 import { MDDChart } from "@/components/charts/MDDChart"
 import { BackupRestoreModal } from "@/components/ui/BackupRestoreModal"
+import { EditRoundSettingsModal } from "@/components/ui/EditRoundSettingsModal"
 
 export default function Home() {
   const [rounds, setRounds] = useState<Round[]>([])
@@ -40,6 +41,7 @@ export default function Home() {
   const [deletingTrade, setDeletingTrade] = useState<Trade | null>(null)
   const [showDeleteTradeModal, setShowDeleteTradeModal] = useState(false)
   const [showBackupRestoreModal, setShowBackupRestoreModal] = useState(false)
+  const [showEditRoundSettingsModal, setShowEditRoundSettingsModal] = useState(false)
 
   // 회차 데이터 불러오기
   const loadRoundsData = async () => {
@@ -126,12 +128,31 @@ export default function Home() {
   }
 
   // 새 회차 생성 핸들러
-  const handleCreateRound = async (symbol: string, firstBuyPrice: number, firstBuyQuantity: number) => {
+  const handleCreateRound = async (symbol: string, firstBuyPrice: number, firstBuyQuantity: number, seedAmount?: number, tryAmount?: number) => {
     const nextRoundNumber = await getNextRoundNumber()
     const firstBuy = createTrade(symbol, "buy", firstBuyPrice, firstBuyQuantity)
-    const newRound = createRound(symbol, nextRoundNumber, [firstBuy])
+    const newRound = createRound(symbol, nextRoundNumber, [firstBuy], seedAmount, tryAmount)
     await addRound(newRound)
     await loadRoundsData()
+  }
+
+  // 회차 기준 금액 편집 핸들러
+  const handleUpdateRoundSettings = async (totalSeedAmount?: number, tryAmount?: number) => {
+    if (!selectedRound) return
+
+    await updateRound(selectedRound.id, {
+      totalSeedAmount,
+      tryAmount
+    })
+
+    await loadRoundsData()
+
+    // selectedRound 업데이트
+    const updatedRounds = await loadRounds()
+    const updated = updatedRounds.find((r) => r.id === selectedRound.id)
+    if (updated) {
+      setSelectedRound(updated)
+    }
   }
 
   // 매수 추가 핸들러
@@ -375,6 +396,7 @@ export default function Home() {
           }}
           onDelete={() => console.log("Delete round")}
           onUpdateCurrentPrice={handleUpdateCurrentPrice}
+          onUpdateRoundSettings={() => setShowEditRoundSettingsModal(true)}
         />
       )}
 
@@ -430,6 +452,16 @@ export default function Home() {
           }}
           onConfirm={handleDeleteTrade}
           trade={deletingTrade}
+        />
+      )}
+
+      {/* Edit Round Settings Modal */}
+      {selectedRound && (
+        <EditRoundSettingsModal
+          isOpen={showEditRoundSettingsModal}
+          onClose={() => setShowEditRoundSettingsModal(false)}
+          onSubmit={handleUpdateRoundSettings}
+          round={selectedRound}
         />
       )}
 

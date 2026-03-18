@@ -5,6 +5,7 @@ import { formatPrice, formatQuantity, formatAmount, formatProfitRate, formatDate
 import { Button } from "./Button"
 import { useState } from "react"
 import { RoundTimeSeriesProfitChart } from "@/components/charts/RoundTimeSeriesProfitChart"
+import { V22Guide } from "./V22Guide"
 
 interface RoundDetailModalProps {
   round: Round
@@ -15,6 +16,7 @@ interface RoundDetailModalProps {
   onDeleteTrade: (trade: Trade) => void
   onDelete: () => void
   onUpdateCurrentPrice: (price: number) => void
+  onUpdateRoundSettings: (totalSeedAmount?: number, tryAmount?: number) => void
 }
 
 export function RoundDetailModal({
@@ -26,6 +28,7 @@ export function RoundDetailModal({
   onDeleteTrade,
   onDelete,
   onUpdateCurrentPrice,
+  onUpdateRoundSettings,
 }: RoundDetailModalProps) {
   const [currentPriceInput, setCurrentPriceInput] = useState("")
   const profitColor = getProfitColorClass(round.profitRate)
@@ -57,7 +60,10 @@ export function RoundDetailModal({
 
         {/* Content */}
         <div className="p-4 overflow-y-auto flex-1 space-y-4">
-          {/* Basic Info */}
+          {/* V2.2 가이드 영역 추가 */}
+          <V22Guide round={round} />
+
+         {/* Basic Info */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <div className="text-sm text-black dark:text-white">종목</div>
@@ -67,6 +73,18 @@ export function RoundDetailModal({
               <div className="text-sm text-black dark:text-white">상태</div>
               <div className="font-semibold">
                 {round.status === "active" ? "진행중" : "완료"}
+              </div>
+            </div>
+            <div>
+              <div className="text-sm text-black dark:text-white">총 원금(Seed)</div>
+              <div className="font-semibold">
+                {round.totalSeedAmount !== undefined ? formatAmount(round.totalSeedAmount) : "미설정"}
+              </div>
+            </div>
+            <div>
+              <div className="text-sm text-black dark:text-white">1회 시도액</div>
+              <div className="font-semibold">
+                {round.tryAmount !== undefined ? formatAmount(round.tryAmount) : "미설정 (자동)"}
               </div>
             </div>
             <div>
@@ -293,7 +311,10 @@ export function RoundDetailModal({
         {/* Actions */}
         <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex flex-wrap gap-2">
           {round.status === "active" && (
-            <>
+              <>
+              <Button onClick={() => onUpdateRoundSettings()} variant="secondary">
+                설정 편집
+              </Button>
               <Button onClick={onAddBuy} variant="secondary">
                 매수 추가
               </Button>

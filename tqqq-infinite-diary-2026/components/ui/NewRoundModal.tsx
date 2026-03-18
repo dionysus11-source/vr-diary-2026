@@ -6,13 +6,15 @@ import { Symbol } from "@/types"
 interface NewRoundModalProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (symbol: Symbol, firstBuyPrice: number, firstBuyQuantity: number) => Promise<void>
+  onSubmit: (symbol: Symbol, firstBuyPrice: number, firstBuyQuantity: number, totalSeedAmount?: number, tryAmount?: number) => Promise<void>
 }
 
 export function NewRoundModal({ isOpen, onClose, onSubmit }: NewRoundModalProps) {
   const [symbol, setSymbol] = useState<Symbol>("TQQQ")
   const [price, setPrice] = useState("")
   const [quantity, setQuantity] = useState("")
+  const [seedAmount, setSeedAmount] = useState("")
+  const [tryAmount, setTryAmount] = useState("")
   const [loading, setLoading] = useState(false)
 
   if (!isOpen) return null
@@ -33,9 +35,12 @@ export function NewRoundModal({ isOpen, onClose, onSubmit }: NewRoundModalProps)
       return
     }
 
+    const seedNum = seedAmount ? Number.parseFloat(seedAmount) : undefined
+    const tryNum = tryAmount ? Number.parseFloat(tryAmount) : undefined
+
     try {
       setLoading(true)
-      await onSubmit(symbol, priceNum, quantityNum)
+      await onSubmit(symbol, priceNum, quantityNum, seedNum, tryNum)
       handleClose()
     } catch (error) {
       alert(error instanceof Error ? error.message : "회차 생성에 실패했습니다")
@@ -48,6 +53,8 @@ export function NewRoundModal({ isOpen, onClose, onSubmit }: NewRoundModalProps)
     setSymbol("TQQQ")
     setPrice("")
     setQuantity("")
+    setSeedAmount("")
+    setTryAmount("")
     onClose()
   }
 
@@ -73,6 +80,40 @@ export function NewRoundModal({ isOpen, onClose, onSubmit }: NewRoundModalProps)
                 <option value="TQQQ">TQQQ</option>
                 <option value="SOXL">SOXL</option>
               </select>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              {/* 총 투자 원금 */}
+              <div>
+                <label className="block text-sm font-medium text-black dark:text-white mb-1">
+                  총 투자 원금 (선택)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={seedAmount}
+                  onChange={(e) => setSeedAmount(e.target.value)}
+                  placeholder="예: 40000"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              {/* 1회 매수 시도액 */}
+              <div>
+                <label className="block text-sm font-medium text-black dark:text-white mb-1">
+                  1회 시도액 (선택)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={tryAmount}
+                  onChange={(e) => setTryAmount(e.target.value)}
+                  placeholder="예: 1000"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
             </div>
 
             {/* 매수 가격 */}

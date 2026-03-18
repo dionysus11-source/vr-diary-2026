@@ -29,7 +29,9 @@ export function createTrade(
 export function createRound(
   symbol: Symbol,
   roundNumber: number,
-  buys: Trade[]
+  buys: Trade[],
+  totalSeedAmount?: number,
+  tryAmount?: number
 ): Round {
   const now = new Date().toISOString()
 
@@ -38,6 +40,8 @@ export function createRound(
     roundNumber,
     symbol,
     status: "active",
+    totalSeedAmount,
+    tryAmount,
     buys,
     sells: [],
     averageBuyPrice: 0, // updateRoundCalculations에서 계산

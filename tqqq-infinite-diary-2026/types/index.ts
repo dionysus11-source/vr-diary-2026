@@ -24,6 +24,8 @@ export interface Round {
   roundNumber: number
   symbol: Symbol
   status: RoundStatus
+  totalSeedAmount?: number // 총 투자 원금 (Seed)
+  tryAmount?: number // 1회 매수 시도액
   buys: Trade[] // 분할 매수 기록
   sells: Trade[] // 분할 매도 기록 (중간 매도 포함)
   averageBuyPrice: number // 평균 매수 단가
