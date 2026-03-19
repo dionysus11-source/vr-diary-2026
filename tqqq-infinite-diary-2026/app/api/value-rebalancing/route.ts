@@ -15,8 +15,20 @@ export async function GET(request: Request) {
   return NextResponse.json({
     initialPortfolio,
     records,
-    rounds,
-    transactions: rounds.flatMap((r: any) => r.transactions)
+    rounds: rounds.map((r: any) => ({
+      ...r,
+      roundId: r.id,
+      transactions: r.transactions.map((t: any) => ({
+        ...t,
+        roundId: t.vrRoundId
+      }))
+    })),
+    transactions: rounds.flatMap((r: any) => 
+      r.transactions.map((t: any) => ({
+        ...t,
+        roundId: t.vrRoundId
+      }))
+    )
   })
 }
 
