@@ -13,6 +13,10 @@ export function RoundCard({ round, viewMode, onClick }: RoundCardProps) {
   const statusBg = getStatusBgClass(round.status)
   const profitColor = getProfitColorClass(round.profitRate)
 
+  const hasSeed = !!round.totalSeedAmount && round.totalSeedAmount > 0
+  const progressRatio = hasSeed ? Math.min(round.totalBuyAmount / round.totalSeedAmount!, 1) : 0
+  const progressPercent = (progressRatio * 100).toFixed(1)
+
   return (
     <div
       onClick={onClick}
@@ -43,6 +47,22 @@ export function RoundCard({ round, viewMode, onClick }: RoundCardProps) {
           {round.profitRate !== undefined ? formatProfitRate(round.profitRate) : "-"}
         </div>
       </div>
+
+      {/* Progress Bar (진행중 & 시드 설정됨) */}
+      {round.status === "active" && hasSeed && (
+        <div className="mb-4">
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-xs font-medium text-gray-700 dark:text-gray-300">진행도 (시드 소진율)</span>
+            <span className="text-xs font-bold text-blue-600 dark:text-blue-400">{progressPercent}%</span>
+          </div>
+          <div className="w-full bg-blue-100 dark:bg-gray-700 rounded-full h-2">
+            <div 
+              className="bg-blue-600 h-2 rounded-full transition-all duration-500" 
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Compact Mode */}
       {isCompact && (
