@@ -67,7 +67,12 @@ export default function SettingsPage() {
       })
 
       if (!res.ok) {
-        throw new Error("서버 복원 처리에 실패했습니다.")
+        let msg = "서버 복원 처리에 실패했습니다.";
+        try {
+          const errData = await res.json();
+          if (errData.error) msg = errData.error;
+        } catch(e) {}
+        throw new Error(msg)
       }
 
       setRestoreMessage("✅ 복원이 성공적으로 완료되었습니다. 변경사항을 반영하기 위해 페이지를 새로고침 해주세요.")
