@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     initialPortfolio,
     records,
     rounds,
-    transactions: rounds.flatMap(r => r.transactions)
+    transactions: rounds.flatMap((r: any) => r.transactions)
   })
 }
 
