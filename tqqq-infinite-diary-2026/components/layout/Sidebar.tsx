@@ -33,8 +33,10 @@ export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false)
 
   return (
+    <>
     <aside
       className={`
+        hidden md:block
         fixed left-0 top-0 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700
         transition-all duration-300 z-40
         ${isCollapsed ? "w-16" : "w-64"}
@@ -81,5 +83,25 @@ export function Sidebar() {
         })}
       </nav>
     </aside>
+
+    {/* 모바일 하단 네비게이션 */}
+    <nav className="md:hidden fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 z-50 flex justify-around pb-safe">
+      {sidebarItems.map((item) => {
+        const isActive = pathname === item.href
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`flex flex-col items-center justify-center flex-1 py-2 ${
+              isActive ? "text-blue-600 dark:text-blue-400 font-semibold" : "text-gray-500 dark:text-gray-400"
+            }`}
+          >
+            <span className="text-xl mb-1">{item.icon}</span>
+            <span className="text-[10px] whitespace-nowrap">{item.name}</span>
+          </Link>
+        )
+      })}
+    </nav>
+    </>
   )
 }

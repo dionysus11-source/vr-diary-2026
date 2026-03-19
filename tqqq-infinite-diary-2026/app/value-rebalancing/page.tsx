@@ -87,14 +87,14 @@ export default function ValueRebalancingPage() {
   if (!initialPortfolio) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 gap-4">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
             밸류 리밸런싱
           </h1>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2 w-full md:w-auto">
             <button
               onClick={() => setShowBackupModal(true)}
-              className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+              className="flex-1 md:flex-none bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-3 md:px-4 rounded-lg transition-colors text-sm md:text-base text-center"
             >
               백업/복원
             </button>
@@ -168,26 +168,26 @@ export default function ValueRebalancingPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 gap-4">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
           밸류 리밸런싱
         </h1>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 w-full md:w-auto">
           <button
             onClick={() => setShowBackupModal(true)}
-            className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            className="flex-1 md:flex-none bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-3 md:px-4 rounded-lg transition-colors text-sm md:text-base text-center"
           >
             백업/복원
           </button>
           <button
             onClick={() => setShowRecommendationModal(true)}
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            className="flex-1 md:flex-none bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-3 md:px-4 rounded-lg transition-colors text-sm md:text-base text-center"
           >
             매수/매도 추천
           </button>
           <button
             onClick={() => setShowVValueForm(!showVValueForm)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
+            className="flex-1 md:flex-none bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 md:px-6 rounded-lg transition-colors text-sm md:text-base text-center"
           >
             {showVValueForm ? "닫기" : "V값 계산"}
           </button>

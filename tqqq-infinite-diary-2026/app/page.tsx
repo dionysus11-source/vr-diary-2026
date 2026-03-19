@@ -297,14 +297,14 @@ export default function Home() {
         <header className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
                 무한 매수 다이어리 2026
               </h1>
               <p className="text-black dark:text-white mt-1">
                 TQQQ/SOXL 무한 매수 회차별 수익률 추적 및 분석
               </p>
             </div>
-            <div className="flex gap-2 items-center">
+            <div className="flex flex-wrap gap-2 items-center w-full md:w-auto">
               <ThemeToggle />
               <Button
                 variant="secondary"

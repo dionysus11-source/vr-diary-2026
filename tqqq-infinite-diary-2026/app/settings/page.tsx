@@ -94,8 +94,8 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8 dark:text-white">환경설정</h1>
+    <div className="p-4 md:p-8 max-w-4xl mx-auto">
+      <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 dark:text-white">환경설정</h1>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden mb-8">
         <div className="p-6 border-b border-gray-200 dark:border-gray-700">
