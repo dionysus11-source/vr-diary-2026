@@ -12,9 +12,9 @@ interface TabNavigationProps {
 
 export function TabNavigation({ activeTab, onTabChange, counts }: TabNavigationProps) {
   const tabs: { key: TabFilter; label: string }[] = [
-    { key: "all", label: "전체" },
     { key: "active", label: "진행중" },
     { key: "completed", label: "완료" },
+    { key: "all", label: "전체" },
   ]
 
   return (

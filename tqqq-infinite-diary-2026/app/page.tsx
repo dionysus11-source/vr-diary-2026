@@ -30,7 +30,7 @@ export default function Home() {
   const [rounds, setRounds] = useState<Round[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<TabFilter>("all")
+  const [activeTab, setActiveTab] = useState<TabFilter>("active")
   const [viewMode, setViewMode] = useState<CardViewMode>("compact")
   const [selectedRound, setSelectedRound] = useState<Round | null>(null)
   const [showNewRoundModal, setShowNewRoundModal] = useState(false)

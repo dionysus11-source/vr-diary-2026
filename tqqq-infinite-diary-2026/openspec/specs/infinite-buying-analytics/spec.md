@@ -72,7 +72,8 @@ TBD - created by archiving change add-infinite-buying-analytics. Update Purpose 
 #### Scenario: 탭으로 회차 필터링
 - **WHEN** 사용자가 대시보드 상단의 탭을 선택한다
 - **THEN** 선택한 탭에 해당하는 회차만 표시한다
-- **AND** 탭 옵션: "전체", "진행중", "완료"
+- **AND** 탭 옵션은 "진행중", "완료", "전체" 순서로 정렬된다
+- **AND** 초기 진입 시 기본 탭은 "진행중"으로 자동 선택된다
 - **AND** 현재 선택된 탭이 시각적으로 강조된다
 
 #### Scenario: 탭별 회차 카운트 표시
@@ -115,6 +116,11 @@ TBD - created by archiving change add-infinite-buying-analytics. Update Purpose 
 - **THEN** 수익 회차는 초록색 테두리/배경을 가진다
 - **AND** 손실 회차는 빨간색 테두리/배경을 가진다
 - **AND** 진행중 회차는 파란색 테두리/배경을 가진다
+
+#### Scenario: 카드 헤더 강조 표시
+- **WHEN** 회차 카드가 표시된다
+- **THEN** 종목명(예: TQQQ, SOXL)을 회차 번호보다 시각적으로 더 크고 굵은 폰트로 가장 눈에 띄게 배치한다
+- **AND** 회차 번호는 종목명 옆에 뱃지 형태로 보조 정보로서 제공한다
 
 ### Requirement: 회차 상세 모달
 시스템 SHALL 카드 클릭 시 회차 상세를 모달로 표시해야 한다(MUST).
@@ -215,11 +221,11 @@ TBD - created by archiving change add-infinite-buying-analytics. Update Purpose 
 - **AND** 평균 단가를 재계산한다
 
 ### Requirement: 무한 매수 기록 데이터 수집
-시스템 SHALL 무한 매수 기록 데이터를 수집하고 저장해야 한다(MUST).
+시스템 SHALL 무한 매수 기록 데이터를 수집하고 서버 데이터베이스에 영구적으로 보존해야 한다(MUST).
 
-#### Scenario: 데이터 수집 성공
+#### Scenario: 데이터 수집 및 서버 저장 성공
 - **WHEN** 유효한 무한 매수 기록 데이터가 제공된다
-- **THEN** 데이터를 저장소에 저장한다
+- **THEN** 데이터를 백엔드 API를 통해 서버 데이터베이스에 우선적으로 저장한다
 - **AND** 각 회차의 다음 정보를 보존한다:
   - 회차 번호
   - 종목명 (TQQQ, SOXL 등)
@@ -236,10 +242,15 @@ TBD - created by archiving change add-infinite-buying-analytics. Update Purpose 
   - 총 수익률 및 수익금
   - 회차 상태 (진행중/완료)
 
+#### Scenario: 서버 기반 이기종 환경 동기화
+- **WHEN** 사용자가 PC 및 모바일 등 서로 다른 브라우저 환경에서 접속한다
+- **THEN** 서버로부터 인증된 세션에 해당하는 최신 데이터를 불러와 동일한 화면을 제공한다
+- **AND** 순수 로컬 캐시에만 의존하지 않고 항상 중앙 서버 데이터를 **Single Source of Truth** 로 취급한다
+
 #### Scenario: 데이터 형식 검증
 - **WHEN** 잘못된 형식의 데이터가 입력된다
 - **THEN** 사용자에게 오류 메시지를 표시한다
-- **AND** 데이터를 저장하지 않는다
+- **AND** 데이터를 서버에 반영하지 않고 보호한다
 
 ### Requirement: 누적 수익금 추이 시각화
 시스템 SHALL 전체 기간 동안의 누적 수익금 변화를 차트로 보여줘야 한다(MUST).

@@ -21,6 +21,11 @@ const sidebarItems: SidebarItem[] = [
     href: "/value-rebalancing",
     icon: "⚖️",
   },
+  {
+    name: "환경설정",
+    href: "/settings",
+    icon: "⚙️",
+  },
 ]
 
 export function Sidebar() {

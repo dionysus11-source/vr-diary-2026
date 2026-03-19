@@ -1,7 +1,8 @@
 import { VRDatabase, VRRecord, VRInitialPortfolio, VRRound, VRTransaction, VRBackupData } from "@/types"
 import { ValueRebalancingCalculator } from "@/lib/calculations/vr-calculator"
+import { getOrCreateDeviceId } from "@/lib/utils/auth"
 
-const STORAGE_KEY = "value_rebalancing_db"
+const API_BASE = "/api/value-rebalancing"
 
 /**
  * 초기 데이터베이스 생성
@@ -24,13 +25,22 @@ export async function loadVRDatabase(): Promise<VRDatabase> {
     if (typeof window === "undefined") {
       return createInitialDatabase()
     }
+    const userId = getOrCreateDeviceId()
 
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (!stored) {
-      return createInitialDatabase()
+    const res = await fetch(`${API_BASE}?userId=${userId}`, {
+      headers: { 'x-user-id': userId }
+    })
+    
+    if (!res.ok) {
+      throw new Error("서버에서 VR 데이터를 불러오는데 실패했습니다.")
     }
-
-    const db: VRDatabase = JSON.parse(stored)
+    
+    const db: VRDatabase = await res.json()
+    // Nullable values fix for initial
+    if (!db.records) db.records = []
+    if (!db.rounds) db.rounds = []
+    if (!db.transactions) db.transactions = []
+    
     return db
   } catch (error) {
     console.error("Failed to load VR database:", error)
@@ -43,12 +53,18 @@ export async function loadVRDatabase(): Promise<VRDatabase> {
  */
 export async function saveVRDatabase(db: VRDatabase): Promise<void> {
   try {
-    if (typeof window === "undefined") {
-      return
-    }
-
+    if (typeof window === "undefined") return
+    const userId = getOrCreateDeviceId()
     db.lastUpdated = new Date().toISOString()
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(db))
+    
+    await fetch(API_BASE, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-user-id": userId
+      },
+      body: JSON.stringify(db)
+    })
   } catch (error) {
     console.error("Failed to save VR database:", error)
     throw new Error("데이터 저장에 실패했습니다")
@@ -171,11 +187,11 @@ export async function getVRTransactionsByRound(roundId: string): Promise<VRTrans
  * 데이터 초기화
  */
 export async function clearVRData(): Promise<void> {
-  if (typeof window === "undefined") {
-    return
-  }
-
-  localStorage.removeItem(STORAGE_KEY)
+  if (typeof window === "undefined") return
+  
+  // 빈 데이터베이스를 서버에 동기화하여 초기화
+  const emptyDb = createInitialDatabase()
+  await saveVRDatabase(emptyDb)
 }
 
 /**
@@ -223,22 +239,16 @@ export async function restoreVRFromJSONBackup(file: File): Promise<void> {
     const text = await file.text()
     const backupData = JSON.parse(text) as VRBackupData
 
-    // 백업 파일 형식 검증
     if (!backupData.version || !backupData.data) {
       throw new Error("잘못된 백업 파일 형식입니다")
     }
 
-    // 데이터베이스 구조 검증
     const db = backupData.data
     if (!db.records || !Array.isArray(db.records)) {
       throw new Error("백업 파일 데이터가 올바르지 않습니다")
     }
 
-    // localStorage에 저장
-    db.lastUpdated = new Date().toISOString()
-    if (typeof window !== "undefined") {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(db))
-    }
+    await saveVRDatabase(db)
   } catch (error) {
     console.error("Failed to restore VR backup:", error)
     throw new Error("백업 복원에 실패했습니다")

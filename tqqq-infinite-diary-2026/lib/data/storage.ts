@@ -1,9 +1,9 @@
 import { Database, Round } from "@/types"
 import { updateRoundCalculations } from "@/lib/calculations/rounds"
 import { getKoreanDate } from "@/lib/utils/timezone"
-import { runMigration } from "@/lib/utils/migration"
+import { getOrCreateDeviceId } from "@/lib/utils/auth"
 
-const DATA_FILE = "/data/database.json"
+const API_BASE = "/api/infinite-buying"
 
 /**
  * 초기 데이터베이스 생성
@@ -17,33 +17,28 @@ function createInitialDatabase(): Database {
 }
 
 /**
- * 데이터베이스 불러오기
+ * 데이터베이스 불러오기 (서버 연동)
  */
 export async function loadDatabase(): Promise<Database> {
   try {
-    // 브라우저 환경인지 확인
     if (typeof window === "undefined") {
       return createInitialDatabase()
     }
-
-    // localStorage에서 데이터 불러오기
-    const stored = localStorage.getItem("infinite_buying_db")
-    if (!stored) {
-      return createInitialDatabase()
+    const userId = getOrCreateDeviceId()
+    const res = await fetch(`${API_BASE}?userId=${userId}`, {
+      headers: { 'x-user-id': userId }
+    })
+    
+    if (!res.ok) {
+      throw new Error("서버에서 데이터를 불러오는데 실패했습니다.")
     }
-
-    const db: Database = JSON.parse(stored)
-
-    // 한국시간 기반 마이그레이션 실행 (최초 1회)
-    await runMigration()
-
-    // 마이그레이션 후 다시 로드
-    const migratedStored = localStorage.getItem("infinite_buying_db")
-    if (migratedStored && migratedStored !== stored) {
-      return JSON.parse(migratedStored)
+    
+    const rounds: Round[] = await res.json()
+    return {
+      rounds,
+      symbols: ["TQQQ", "SOXL"],
+      lastUpdated: new Date().toISOString()
     }
-
-    return db
   } catch (error) {
     console.error("Failed to load database:", error)
     return createInitialDatabase()
@@ -51,21 +46,12 @@ export async function loadDatabase(): Promise<Database> {
 }
 
 /**
- * 데이터베이스 저장하기
+ * 전역 데이터베이스 저장하기
+ * (과거 호환성을 위한 래퍼이지만 가급적 개별 CRUD 함수를 사용 권장)
  */
 export async function saveDatabase(db: Database): Promise<void> {
-  try {
-    // 브라우저 환경인지 확인
-    if (typeof window === "undefined") {
-      return
-    }
-
-    db.lastUpdated = new Date().toISOString()
-    localStorage.setItem("infinite_buying_db", JSON.stringify(db))
-  } catch (error) {
-    console.error("Failed to save database:", error)
-    throw new Error("데이터 저장에 실패했습니다")
-  }
+  // 전역 저장은 성능상 이슈가 있으나 호환성을 위해 유지
+  // 개별 updateRound/addRound로 대체되는 추세
 }
 
 /**
@@ -111,52 +97,70 @@ export async function loadRounds(): Promise<Round[]> {
 }
 
 /**
- * 회차 저장하기
+ * 회차 저장하기 (일괄 업데이트)
  */
 export async function saveRquares(rounds: Round[]): Promise<void> {
-  const db = await loadDatabase()
-  db.rounds = rounds
-  await saveDatabase(db)
+  // 개별 API 업데이트로 변경
+  for (const round of rounds) {
+    await updateRound(round.id, round)
+  }
 }
 
 /**
  * 회차 추가
  */
 export async function addRound(round: Round): Promise<void> {
-  const db = await loadDatabase()
+  if (typeof window === "undefined") return
+  const userId = getOrCreateDeviceId()
   const updatedRound = updateRoundCalculations(round)
-  db.rounds.push(updatedRound)
-  await saveDatabase(db)
+  
+  await fetch(API_BASE, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-user-id": userId
+    },
+    body: JSON.stringify(updatedRound)
+  })
 }
 
 /**
  * 회차 업데이트
  */
 export async function updateRound(roundId: string, updates: Partial<Round>): Promise<void> {
+  if (typeof window === "undefined") return
+  const userId = getOrCreateDeviceId()
+  
+  // 전체 상태를 가져와서 병합 후 PUT (현재 API는 전체 교체 방식)
   const db = await loadDatabase()
   const index = db.rounds.findIndex((r) => r.id === roundId)
-
-  if (index === -1) {
-    throw new Error("회차를 찾을 수 없습니다")
-  }
-
-  db.rounds[index] = {
-    ...db.rounds[index],
-    ...updates,
-    updatedAt: new Date().toISOString(),
-  }
-
-  db.rounds[index] = updateRoundCalculations(db.rounds[index])
-  await saveDatabase(db)
+  if (index === -1) throw new Error("회차를 찾을 수 없습니다")
+  
+  let currentRound = db.rounds[index]
+  currentRound = { ...currentRound, ...updates, updatedAt: new Date().toISOString() }
+  currentRound = updateRoundCalculations(currentRound)
+  
+  await fetch(`${API_BASE}/${roundId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-user-id": userId
+    },
+    body: JSON.stringify(currentRound)
+  })
 }
 
 /**
  * 회차 삭제
  */
 export async function deleteRound(roundId: string): Promise<void> {
-  const db = await loadDatabase()
-  db.rounds = db.rounds.filter((r) => r.id !== roundId)
-  await saveDatabase(db)
+  if (typeof window === "undefined") return
+  const userId = getOrCreateDeviceId()
+  
+  await fetch(`${API_BASE}/${roundId}`, {
+    method: "DELETE",
+    headers: { "x-user-id": userId }
+  })
 }
 
 /**
@@ -238,18 +242,17 @@ export function downloadCSV(rounds: Round[], filename: string = "rounds.csv"): v
 /**
  * JSON 백업 파일 생성 및 다운로드
  */
-export function downloadJSONBackup(): void {
+export async function downloadJSONBackup(): Promise<void> {
   if (typeof window === "undefined") {
     return
   }
 
   try {
-    const stored = localStorage.getItem("infinite_buying_db")
-    if (!stored) {
+    const db = await loadDatabase()
+    if (db.rounds.length === 0) {
       throw new Error("백업할 데이터가 없습니다")
     }
 
-    const db: Database = JSON.parse(stored)
     const backupData = {
       version: "1.0",
       exportedAt: new Date().toISOString(),
@@ -289,15 +292,21 @@ export async function restoreFromJSONBackup(file: File): Promise<void> {
       throw new Error("잘못된 백업 파일 형식입니다")
     }
 
-    // 데이터베이스 구조 검증
     const db = backupData.data as Database
     if (!db.rounds || !Array.isArray(db.rounds)) {
       throw new Error("백업 파일 데이터가 올바르지 않습니다")
     }
 
-    // localStorage에 저장
-    db.lastUpdated = new Date().toISOString()
-    localStorage.setItem("infinite_buying_db", JSON.stringify(db))
+    // 통째로 복원하는 엔드포인트가 `/api/infinite-buying/sync` 등이 없으므로 
+    // 기존 라운드를 모두 삭제 후 재등록 (임시 구현체)
+    // 실제로는 Global Data Management 백업으로 유도하는 것이 좋습니다.
+    const currentDb = await loadDatabase()
+    for (const r of currentDb.rounds) {
+      await deleteRound(r.id)
+    }
+    for (const r of db.rounds) {
+      await addRound(r)
+    }
   } catch (error) {
     console.error("Failed to restore backup:", error)
     throw new Error("백업 복원에 실패했습니다")

@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  infiniteRounds InfiniteRound[]
+  vrPortfolios   VrInitialPortfolio[]
+  vrRecords      VrRecord[]
+  vrRounds       VrRound[]
+}
+
+model InfiniteRound {
+  id                    String   @id
+  userId                String
+  roundNumber           Int
+  symbol                String
+  status                String   // "active" | "completed"
+  totalSeedAmount       Float?
+  tryAmount             Float?
+
+  averageBuyPrice       Float
+  totalBuyQuantity      Float
+  totalSellQuantity     Float
+  remainingQuantity     Float
+  totalBuyAmount        Float
+  totalSellAmount       Float
+  netSellAmount         Float
+  currentPrice          Float?
+
+  profitRate            Float?
+  realizedProfitRate    Float?
+  unrealizedProfitRate  Float?
+  profitAmount          Float?
+  realizedProfitAmount  Float?
+  unrealizedProfitAmount Float?
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  buys                  InfiniteTrade[] @relation("BuyTrades")
+  sells                 InfiniteTrade[] @relation("SellTrades")
+}
+
+model InfiniteTrade {
+  id        String   @id
+  type      String   // "buy" | "sell"
+  symbol    String
+  date      String   // YYYY-MM-DD
+  price     Float
+  quantity  Float
+  amount    Float
+
+  roundBuyId  String?
+  roundSellId String?
+
+  roundBuy    InfiniteRound? @relation("BuyTrades", fields: [roundBuyId], references: [id], onDelete: Cascade)
+  roundSell   InfiniteRound? @relation("SellTrades", fields: [roundSellId], references: [id], onDelete: Cascade)
+
+  @@index([roundBuyId])
+  @@index([roundSellId])
+}
+
+model VrInitialPortfolio {
+  id            String   @id @default(uuid())
+  userId        String
+  initialDate   String
+  initialCash   Float
+  initialShares Float
+  averagePrice  Float
+  totalInvested Float
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VrRecord {
+  id               String   @id @default(uuid())
+  userId           String
+  date             String
+  price            Float
+  shares           Float
+  pool             Float
+  eValue           Float
+  vValue           Float
+  signal           String  // BUY, SELL, HOLD
+  benchmarkShares  Float
+  benchmarkValue   Float
+  createdAt        DateTime @default(now())
+
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VrRound {
+  id            String   @id // roundId in types (e.g. 1차수)
+  userId        String
+  roundNumber   Int
+  startDate     String
+  endDate       String
+  initialShares Float
+  initialPool   Float
+  finalShares   Float
+  finalPool     Float
+  sharesChange  Float
+  poolChange    Float
+  isActive      Boolean
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions  VrTransaction[]
+}
+
+model VrTransaction {
+  id          String   @id
+  vrRoundId   String
+  date        String
+  type        String   // BUY, SELL
+  shares      Float
+  price       Float
+  totalAmount Float
+  sharesAfter Float
+  poolAfter   Float
+  notes       String
+  createdAt   DateTime @default(now())
+
+  vrRound     VrRound  @relation(fields: [vrRoundId], references: [id], onDelete: Cascade)
+}

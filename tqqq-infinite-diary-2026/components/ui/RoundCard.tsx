@@ -28,11 +28,13 @@ export function RoundCard({ round, viewMode, onClick }: RoundCardProps) {
       <div className="flex justify-between items-start mb-3">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="text-lg font-bold">회차 {round.roundNumber}</h3>
-            <span className="px-2 py-0.5 text-xs rounded bg-white dark:bg-gray-700">
+            <h3 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
               {round.symbol}
+            </h3>
+            <span className="px-2.5 py-1 text-sm font-semibold rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
+              {round.roundNumber}회차
             </span>
-            <span className="px-2 py-0.5 text-xs rounded bg-white dark:bg-gray-700">
+            <span className={`px-2 py-0.5 text-xs font-bold rounded ${round.status === 'active' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'}`}>
               {round.status === "active" ? "진행중" : "완료"}
             </span>
           </div>

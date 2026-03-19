@@ -36,3 +36,5 @@ next-env.d.ts
 # data
 public/data/*.json
 !public/data/.gitkeep
+
+/lib/generated/prisma

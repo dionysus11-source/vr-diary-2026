@@ -85,7 +85,27 @@ export default function ValueRebalancingPage() {
 
   // 초기 포트폴리오가 설정되지 않은 경우
   if (!initialPortfolio) {
-    return <VRInitialPortfolioForm onComplete={handleInitialPortfolioComplete} />
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            밸류 리밸런싱
+          </h1>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowBackupModal(true)}
+              className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            >
+              백업/복원
+            </button>
+          </div>
+        </div>
+        <VRInitialPortfolioForm onComplete={handleInitialPortfolioComplete} />
+        {showBackupModal && (
+          <VRBackupRestoreModal onClose={() => { setShowBackupModal(false); loadData(); }} />
+        )}
+      </div>
+    )
   }
 
   // 현재 포트폴리오 상태 계산
