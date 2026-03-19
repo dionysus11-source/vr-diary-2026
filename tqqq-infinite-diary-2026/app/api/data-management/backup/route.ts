@@ -29,7 +29,7 @@ export async function GET(request: Request) {
           initialPortfolio: vrInitialPortfolio,
           records: vrRecords,
           rounds: vrRounds,
-          transactions: vrRounds.flatMap(r => r.transactions)
+          transactions: vrRounds.flatMap((r: any) => r.transactions)
         }
       }
     }
