@@ -141,7 +141,7 @@ export default function SettingsPage() {
                 </span>
                 <input
                   type="file"
-                  accept=".json"
+                  accept=".json,application/json,text/plain,*/*"
                   className="hidden"
                   onChange={handleRestore}
                   disabled={isRestoring}
