@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { getOrCreateDeviceId } from "@/lib/utils/auth"
+import { getOrCreateDeviceId, setDeviceId } from "@/lib/utils/auth"
 
 export default function SettingsPage() {
   const [isRestoring, setIsRestoring] = useState(false)
@@ -56,7 +56,13 @@ export default function SettingsPage() {
         throw new Error("지원하지 않는 백업 파일 형식입니다.")
       }
 
-      const userId = getOrCreateDeviceId()
+      let userId = getOrCreateDeviceId()
+      
+      if (backupData.userId && backupData.userId !== userId) {
+        userId = backupData.userId;
+        setDeviceId(userId);
+      }
+      
       const res = await fetch(`/api/data-management/restore`, {
         method: "POST",
         headers: {
