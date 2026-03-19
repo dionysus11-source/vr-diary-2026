@@ -78,11 +78,11 @@ npm run start
    ```
 
 2. **데이터베이스 초기화 (필수)**
-   아직 내부 DB가 설정되어 있지 않으므로 Prisma 클라이언트를 생성하고 DB 스키마를 동기화해야 합니다.
+   내부 DB 파일(`.db`)이 깃허브에 존재하더라도, 현재 컴퓨터 환경에서 DB와 통신할 수 있는 프리즈마 클라이언트(Prisma Client) 코드를 생성해야 합니다.
    ```bash
    npx prisma generate
-   npx prisma db push
    ```
+   *(참고: 만약 `.db` 파일이 깃허브에 없다면 `npx prisma db push`도 추가로 입력해 빈 DB를 만들어주어야 합니다)*
 
 3. **앱 실행**
    ```bash

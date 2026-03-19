@@ -87,12 +87,10 @@ export function getV22GuideInfo(round: Round): V22GuideInfo {
   const buyPoint = Math.round((sellPoint - 0.01) * 100) / 100
 
   // LOC 매수 수량 계산
-  // 1회 구매 금액 / 평단가 = 기준 수량 (소수점 버림)
-  const baseQuantity = averagePrice > 0 ? Math.floor(tryAmount / averagePrice) : 0
-
-  // 매수 2개 포인트의 절반으로 나눔 (홀수면 LOC 평단에 +1)
-  const locAverageQuantity = Math.ceil(baseQuantity / 2) // 올림 처리
-  const locStarQuantity = Math.floor(baseQuantity / 2) // 버림 처리
+  // 1회 구매 금액을 반으로 나누어 각각 평단가로 나눔 (소수점 버림)
+  const halfAmount = tryAmount / 2
+  const locAverageQuantity = averagePrice > 0 ? Math.floor(halfAmount / averagePrice) : 0
+  const locStarQuantity = averagePrice > 0 ? Math.floor(halfAmount / averagePrice) : 0
 
   // 매도 수량 계산 (전체 수량의 25%와 나머지 75%)
   const quarterSellShares = Math.floor(round.remainingQuantity / 4)

@@ -131,7 +131,7 @@ export function V22Guide({ round }: V22GuideProps) {
                       {formatPrice(averagePrice)} <span className="text-sm font-medium text-red-600">× {locAverageQuantity}개</span>
                     </div>
                     <div className="text-xs text-gray-500 mt-1">
-                      {formatAmount(tryAmount)} / {averagePrice.toFixed(2)} = {Math.floor(tryAmount / averagePrice)}개 → 절반: {locAverageQuantity}개
+                      절반 금액({formatAmount(tryAmount / 2)}) / 평단가({averagePrice.toFixed(2)}) = {locAverageQuantity}개
                     </div>
                   </div>
                   <div className="bg-white dark:bg-gray-800 p-3 rounded border border-gray-100 dark:border-gray-700 shadow-sm">
@@ -150,7 +150,7 @@ export function V22Guide({ round }: V22GuideProps) {
                     {formatPrice(buyPoint)} <span className="text-sm font-medium text-red-600">× {locAverageQuantity + locStarQuantity}개</span>
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
-                    {formatAmount(tryAmount)} / {averagePrice.toFixed(2)} = {locAverageQuantity + locStarQuantity}개
+                    각 조건별 {locAverageQuantity}개 매수 (총 {locAverageQuantity + locStarQuantity}개)
                   </div>
                 </div>
               )}
