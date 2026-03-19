@@ -27,7 +27,7 @@ export async function POST(request: Request) {
   try {
     const data = await request.json()
     
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
        await tx.vrInitialPortfolio.deleteMany({ where: { userId } })
        await tx.vrRecord.deleteMany({ where: { userId } })
        await tx.vrRound.deleteMany({ where: { userId } }) 

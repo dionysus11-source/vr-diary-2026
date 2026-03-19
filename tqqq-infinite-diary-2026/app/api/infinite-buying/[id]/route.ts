@@ -10,7 +10,7 @@ export async function PUT(request: Request, context: { params: Promise<{ id: str
     const rawData = await request.json()
     
     // For updates, the easiest way using Prisma while maintaining IDs is to delete existing trades and recreate them, or use a manual transaction.
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
       // 1. Update basic fields
       await tx.infiniteRound.update({
         where: { id, userId },

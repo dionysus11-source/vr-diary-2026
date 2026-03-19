@@ -14,7 +14,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid backup payload format' }, { status: 400 })
     }
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
       // 1. Wipe current user data
       await tx.infiniteRound.deleteMany({ where: { userId } })
       await tx.vrInitialPortfolio.deleteMany({ where: { userId } })
