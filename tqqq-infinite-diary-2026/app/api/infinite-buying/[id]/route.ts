@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 
-export async function PUT(request: Request, context: { params: { id: string } }) {
+export async function PUT(request: Request, context: { params: Promise<{ id: string }> }) {
   const userId = request.headers.get('x-user-id')
   const { id } = await context.params
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -82,7 +82,7 @@ export async function PUT(request: Request, context: { params: { id: string } })
   }
 }
 
-export async function DELETE(request: Request, context: { params: { id: string } }) {
+export async function DELETE(request: Request, context: { params: Promise<{ id: string }> }) {
   const userId = request.headers.get('x-user-id')
   const { id } = await context.params
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
