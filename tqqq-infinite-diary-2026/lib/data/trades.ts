@@ -119,32 +119,32 @@ export function formatTrade(trade: Trade): string {
 /**
  * 가격 형식화
  */
-export function formatPrice(price: number | undefined): string {
-  if (price === undefined || Number.isNaN(price)) return "$0.00"
+export function formatPrice(price: number | undefined | null): string {
+  if (price == null || Number.isNaN(price)) return "$0.00"
   return `$${price.toFixed(2)}`
 }
 
 /**
  * 수량 형식화
  */
-export function formatQuantity(quantity: number | undefined): string {
-  if (quantity === undefined || Number.isNaN(quantity)) return "0"
+export function formatQuantity(quantity: number | undefined | null): string {
+  if (quantity == null || Number.isNaN(quantity)) return "0"
   return quantity.toLocaleString()
 }
 
 /**
  * 금액 형식화
  */
-export function formatAmount(amount: number | undefined): string {
-  if (amount === undefined || Number.isNaN(amount)) return "$0.00"
+export function formatAmount(amount: number | undefined | null): string {
+  if (amount == null || Number.isNaN(amount)) return "$0.00"
   return `$${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
 /**
  * 수익률 형식화
  */
-export function formatProfitRate(rate: number | undefined): string {
-  if (rate === undefined || Number.isNaN(rate)) return "0.00%"
+export function formatProfitRate(rate: number | undefined | null): string {
+  if (rate == null || Number.isNaN(rate)) return "0.00%"
   const sign = rate >= 0 ? "+" : ""
   return `${sign}${rate.toFixed(2)}%`
 }
