@@ -6,6 +6,7 @@ import { Button } from "./Button"
 import { useState } from "react"
 import { RoundTimeSeriesProfitChart } from "@/components/charts/RoundTimeSeriesProfitChart"
 import { V22Guide } from "./V22Guide"
+import { V40Guide } from "./V40Guide"
 
 interface RoundDetailModalProps {
   round: Round
@@ -47,7 +48,12 @@ export function RoundDetailModal({
       <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-          <h2 className="text-xl font-bold">회차 {round.roundNumber} 상세 정보</h2>
+          <h2 className="text-xl font-bold flex items-center gap-2">
+            회차 {round.roundNumber} 상세 정보
+            <span className="px-2.5 py-1 text-sm font-semibold rounded-md bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800/50">
+              v{round.version || "2.2"}
+            </span>
+          </h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
@@ -60,8 +66,12 @@ export function RoundDetailModal({
 
         {/* Content */}
         <div className="p-4 overflow-y-auto flex-1 space-y-4">
-          {/* V2.2 가이드 영역 추가 */}
-          <V22Guide round={round} />
+          {/* 가이드 영역 추가 (버전 분기) */}
+          {round.version === "4.0" ? (
+            <V40Guide round={round} />
+          ) : (
+            <V22Guide round={round} />
+          )}
 
          {/* Basic Info */}
           <div className="grid grid-cols-2 gap-4">

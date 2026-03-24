@@ -23,6 +23,8 @@ model InfiniteRound {
   roundNumber           Int
   symbol                String
   status                String   // "active" | "completed"
+  version               String   @default("2.2")
+  mode                  String   @default("일반모드") // "일반모드" | "리버스모드"
   totalSeedAmount       Float?
   tryAmount             Float?
 

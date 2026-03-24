@@ -38,6 +38,9 @@ export function RoundCard({ round, viewMode, onClick }: RoundCardProps) {
             <span className="px-2.5 py-1 text-sm font-semibold rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
               {round.roundNumber}회차
             </span>
+            <span className="px-2.5 py-1 text-sm font-semibold rounded-md bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800/50">
+              v{round.version || "2.2"}
+            </span>
             <span className={`px-2 py-0.5 text-xs font-bold rounded ${round.status === 'active' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'}`}>
               {round.status === "active" ? "진행중" : "완료"}
             </span>

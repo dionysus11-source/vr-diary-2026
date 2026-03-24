@@ -6,11 +6,12 @@ import { Symbol } from "@/types"
 interface NewRoundModalProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (symbol: Symbol, firstBuyPrice: number, firstBuyQuantity: number, totalSeedAmount?: number, tryAmount?: number) => Promise<void>
+  onSubmit: (symbol: Symbol, firstBuyPrice: number, firstBuyQuantity: number, totalSeedAmount?: number, tryAmount?: number, version?: string) => Promise<void>
 }
 
 export function NewRoundModal({ isOpen, onClose, onSubmit }: NewRoundModalProps) {
   const [symbol, setSymbol] = useState<Symbol>("TQQQ")
+  const [version, setVersion] = useState<string>("2.2")
   const [price, setPrice] = useState("")
   const [quantity, setQuantity] = useState("")
   const [seedAmount, setSeedAmount] = useState("")
@@ -40,7 +41,7 @@ export function NewRoundModal({ isOpen, onClose, onSubmit }: NewRoundModalProps)
 
     try {
       setLoading(true)
-      await onSubmit(symbol, priceNum, quantityNum, seedNum, tryNum)
+      await onSubmit(symbol, priceNum, quantityNum, seedNum, tryNum, version)
       handleClose()
     } catch (error) {
       alert(error instanceof Error ? error.message : "회차 생성에 실패했습니다")
@@ -51,6 +52,7 @@ export function NewRoundModal({ isOpen, onClose, onSubmit }: NewRoundModalProps)
 
   const handleClose = () => {
     setSymbol("TQQQ")
+    setVersion("2.2")
     setPrice("")
     setQuantity("")
     setSeedAmount("")
@@ -80,6 +82,37 @@ export function NewRoundModal({ isOpen, onClose, onSubmit }: NewRoundModalProps)
                 <option value="TQQQ">TQQQ</option>
                 <option value="SOXL">SOXL</option>
               </select>
+            </div>
+
+            {/* 버전 선택 */}
+            <div>
+              <label className="block text-sm font-medium text-black dark:text-white mb-2">
+                무한매수 버젼
+              </label>
+              <div className="flex gap-4">
+                <label className="flex items-center text-sm text-gray-900 dark:text-white font-medium cursor-pointer">
+                  <input
+                    type="radio"
+                    name="version"
+                    value="2.2"
+                    checked={version === "2.2"}
+                    onChange={(e) => setVersion(e.target.value)}
+                    className="mr-2 h-4 w-4 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-blue-500 rounded-full"
+                  />
+                  버전 2.2
+                </label>
+                <label className="flex items-center text-sm text-gray-900 dark:text-white font-medium cursor-pointer">
+                  <input
+                    type="radio"
+                    name="version"
+                    value="4.0"
+                    checked={version === "4.0"}
+                    onChange={(e) => setVersion(e.target.value)}
+                    className="mr-2 h-4 w-4 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-blue-500 rounded-full"
+                  />
+                  버전 4.0
+                </label>
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">

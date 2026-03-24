@@ -24,6 +24,8 @@ export interface Round {
   roundNumber: number
   symbol: Symbol
   status: RoundStatus
+  version?: string // "2.2" | "4.0"
+  mode?: string // "일반모드" | "리버스모드"
   totalSeedAmount?: number // 총 투자 원금 (Seed)
   tryAmount?: number // 1회 매수 시도액
   buys: Trade[] // 분할 매수 기록
