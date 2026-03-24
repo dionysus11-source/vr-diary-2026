@@ -30,6 +30,8 @@ export async function POST(request: Request) {
             roundNumber: round.roundNumber,
             symbol: round.symbol,
             status: round.status,
+            version: round.version || "2.2",
+            mode: round.mode || "일반모드",
             totalSeedAmount: round.totalSeedAmount,
             tryAmount: round.tryAmount,
             averageBuyPrice: round.averageBuyPrice,

@@ -128,10 +128,10 @@ export default function Home() {
   }
 
   // 새 회차 생성 핸들러
-  const handleCreateRound = async (symbol: string, firstBuyPrice: number, firstBuyQuantity: number, seedAmount?: number, tryAmount?: number) => {
+  const handleCreateRound = async (symbol: string, firstBuyPrice: number, firstBuyQuantity: number, seedAmount?: number, tryAmount?: number, version?: string) => {
     const nextRoundNumber = await getNextRoundNumber()
     const firstBuy = createTrade(symbol, "buy", firstBuyPrice, firstBuyQuantity)
-    const newRound = createRound(symbol, nextRoundNumber, [firstBuy], seedAmount, tryAmount)
+    const newRound = createRound(symbol, nextRoundNumber, [firstBuy], seedAmount, tryAmount, version, "일반모드")
     await addRound(newRound)
     await loadRoundsData()
   }

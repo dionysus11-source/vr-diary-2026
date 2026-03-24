@@ -31,7 +31,9 @@ export function createRound(
   roundNumber: number,
   buys: Trade[],
   totalSeedAmount?: number,
-  tryAmount?: number
+  tryAmount?: number,
+  version: string = "2.2",
+  mode: string = "일반모드"
 ): Round {
   const now = new Date().toISOString()
 
@@ -40,6 +42,8 @@ export function createRound(
     roundNumber,
     symbol,
     status: "active",
+    version,
+    mode,
     totalSeedAmount,
     tryAmount,
     buys,
