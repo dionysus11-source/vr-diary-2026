@@ -14,6 +14,7 @@ export interface V22GuideInfo {
   locStarQuantity: number
   quarterSellShares: number
   remainingSellShares: number
+  currentInvestedAmount: number
 }
 
 /**
@@ -75,7 +76,13 @@ export function getGuideState(round: Round, tValue: number): GuideState {
  */
 export function getV22GuideInfo(round: Round): V22GuideInfo {
   const tryAmount = getTryAmount(round)
-  const tValue = calculateTValue(round.totalBuyAmount, tryAmount)
+  
+  // 매도(쿼터매도 등)가 발생하면 남아있는 수량에 대한 투자원금만 T값 계산에 반영
+  const currentInvestedAmount = round.remainingQuantity > 0 
+    ? round.remainingQuantity * (round.averageBuyPrice || 0)
+    : round.totalBuyAmount
+    
+  const tValue = calculateTValue(currentInvestedAmount, tryAmount)
   const starPercentage = calculateStarPercentage(tValue)
   const state = getGuideState(round, tValue)
   const averagePrice = round.averageBuyPrice || 0
@@ -107,7 +114,8 @@ export function getV22GuideInfo(round: Round): V22GuideInfo {
     locAverageQuantity,
     locStarQuantity,
     quarterSellShares,
-    remainingSellShares
+    remainingSellShares,
+    currentInvestedAmount
   }
 }
 
