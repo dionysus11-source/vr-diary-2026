@@ -116,8 +116,15 @@ export function RoundDetailModal({
               <div className="font-semibold">{formatQuantity(round.remainingQuantity)}주</div>
             </div>
             <div>
-              <div className="text-sm text-black dark:text-white">총 매수액</div>
-              <div className="font-semibold">{formatAmount(round.totalBuyAmount)}</div>
+              <div className="text-sm text-black dark:text-white">총 매수/매도액</div>
+              <div className="font-semibold">
+                {formatAmount(round.totalBuyAmount)}
+                {round.totalSellAmount > 0 && (
+                  <span className="text-sm text-gray-500 dark:text-gray-400 ml-1 font-medium">
+                    / {formatAmount(round.totalSellAmount)}
+                  </span>
+                )}
+              </div>
             </div>
             {round.totalSellAmount > 0 && (
               <>
