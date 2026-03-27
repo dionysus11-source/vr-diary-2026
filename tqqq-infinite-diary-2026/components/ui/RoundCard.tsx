@@ -14,7 +14,13 @@ export function RoundCard({ round, viewMode, onClick }: RoundCardProps) {
   const profitColor = getProfitColorClass(round.profitRate)
 
   const hasSeed = !!round.totalSeedAmount && round.totalSeedAmount > 0
-  const progressRatio = hasSeed ? Math.min(round.totalBuyAmount / round.totalSeedAmount!, 1) : 0
+  
+  // 현재 투입 원금 (매도로 인해 줄어든 수량 반영)
+  const currentInvestedAmount = round.remainingQuantity > 0 
+    ? round.remainingQuantity * (round.averageBuyPrice || 0)
+    : round.totalBuyAmount
+
+  const progressRatio = hasSeed ? Math.min(currentInvestedAmount / round.totalSeedAmount!, 1) : 0
   const progressPercent = (progressRatio * 100).toFixed(1)
 
   return (
