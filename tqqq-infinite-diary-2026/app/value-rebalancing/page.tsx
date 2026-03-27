@@ -208,7 +208,7 @@ export default function ValueRebalancingPage() {
       )}
 
       {/* 현재 포트폴리오 상태 카드 */}
-      {portfolioStatus && <VRPortfolioCard status={portfolioStatus} />}
+      {portfolioStatus && <VRPortfolioCard status={portfolioStatus} onUpdate={loadData} />}
 
       {/* 차트들 */}
       {records.length > 0 && (

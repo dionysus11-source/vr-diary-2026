@@ -1,12 +1,16 @@
 "use client"
 
+import { useState } from "react"
 import { VRPortfolioStatus } from "@/types"
+import { VRPortfolioEditModal } from "./VRPortfolioEditModal"
 
 interface VRPortfolioCardProps {
   status: VRPortfolioStatus
+  onUpdate?: () => void
 }
 
-export function VRPortfolioCard({ status }: VRPortfolioCardProps) {
+export function VRPortfolioCard({ status, onUpdate }: VRPortfolioCardProps) {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const {
     shares,
     pool,
@@ -49,9 +53,18 @@ export function VRPortfolioCard({ status }: VRPortfolioCardProps) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-          현재 포트폴리오
-        </h2>
+        <div className="flex items-center gap-3">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            현재 포트폴리오
+          </h2>
+          <button
+            onClick={() => setIsEditModalOpen(true)}
+            className="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"
+            title="포트폴리오 수정 (동기화)"
+          >
+            ✏️
+          </button>
+        </div>
         <div className={`px-3 py-1 rounded-full text-sm font-bold ${getSignalColor()}`}>
           {getSignalText()}
         </div>
@@ -144,6 +157,17 @@ export function VRPortfolioCard({ status }: VRPortfolioCardProps) {
           </div>
         </div>
       </div>
+
+      {isEditModalOpen && (
+        <VRPortfolioEditModal
+          status={status}
+          onClose={() => setIsEditModalOpen(false)}
+          onComplete={() => {
+            setIsEditModalOpen(false)
+            if (onUpdate) onUpdate()
+          }}
+        />
+      )}
     </div>
   )
 }

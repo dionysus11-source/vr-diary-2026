@@ -134,6 +134,52 @@ export async function getLatestVRRecord(): Promise<VRRecord | null> {
 }
 
 /**
+ * 최신 리밸런싱 기록 업데이트 (주식수/현금 수동 동기화용)
+ */
+export async function updateLatestVRRecord(shares: number, pool: number, vValue: number): Promise<void> {
+  const db = await loadVRDatabase()
+  
+  if (db.records.length === 0) {
+    throw new Error("리밸런싱 기록이 없어 갱신할 수 없습니다.")
+  }
+
+  // date 기준으로 내림차순 정렬하여 가장 최신 기록을 찾음
+  const sortedRecords = [...db.records].sort((a, b) => b.date.localeCompare(a.date))
+  const latestRecordSource = sortedRecords[0]
+  
+  // db.records 배열에서 해당 객체를 찾아 업데이트
+  const targetIndex = db.records.findIndex(r => r.createdAt === latestRecordSource.createdAt)
+  
+  if (targetIndex !== -1) {
+    const targetRecord = db.records[targetIndex]
+    targetRecord.shares = shares
+    targetRecord.pool = pool
+    targetRecord.eValue = ValueRebalancingCalculator.calculateEvaluation(targetRecord.price, shares)
+    
+    // 유저가 직접 입력한 V값 적용
+    targetRecord.vValue = vValue
+
+    // 이전 기록 찾기 (최신 기록이 첫 번째 레코드인 경우 previousV는 null)
+    let previousV: number | null = null
+    if (sortedRecords.length > 1) {
+      previousV = sortedRecords[1].vValue
+    }
+
+    // 신호 재계산
+    if (previousV !== null) {
+      const [newSignal] = ValueRebalancingCalculator.determineSignal(previousV, vValue)
+      targetRecord.signal = newSignal
+    } else {
+      targetRecord.signal = "HOLD" // 첫 기록이면 항상 HOLD
+    }
+    
+    await saveVRDatabase(db)
+  } else {
+    throw new Error("최신 기록을 찾을 수 없습니다.")
+  }
+}
+
+/**
  * 차수 추가
  */
 export async function addVRRound(round: VRRound): Promise<void> {
