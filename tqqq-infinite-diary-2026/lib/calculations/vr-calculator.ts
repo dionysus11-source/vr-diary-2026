@@ -12,7 +12,7 @@ export class ValueRebalancingCalculator {
 
   /**
    * V값 계산
-   * v2 = v1 + (pool/10) + (e-v1)/6.32
+   * v2 = v1 + (pool/10) + (e-v1)/(2*√10)
    *
    * @param eValue - 평가금액 (E = 종가 × 주식수)
    * @param pool - 현금
@@ -31,8 +31,8 @@ export class ValueRebalancingCalculator {
     }
 
     // 라오어 밸류 리밸런싱 공식
-    // v2 = v1 + (pool/10) + (e-v1)/6.32
-    const vValue = previousV + pool / this.G + (eValue - previousV) / 6.32
+    // v2 = v1 + (pool/10) + (e-v1)/(2*√10)
+    const vValue = previousV + pool / this.G + (eValue - previousV) / (2 * this.SQRT_G)
     return Math.round(vValue * 100) / 100
   }
 

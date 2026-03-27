@@ -21,7 +21,7 @@ class ValueCalculator:
     ) -> float:
         """
         V 계산
-        v2 = v1 + (pool/G) + (e-v1)/6.32
+        v2 = v1 + (pool/G) + (e-v1)/(2*√10)
 
         Args:
             e_value: 평가금액 (E = 종가 × 주식수)
@@ -36,8 +36,8 @@ class ValueCalculator:
             v_value = e_value + (pool / cls.G)
         else:
             # 라오어 밸류 리밸런싱 공식
-            # v2 = v1 + (pool/10) + (e-v1)/6.32
-            v_value = previous_v + (pool / cls.G) + ((e_value - previous_v) / 6.32)
+            # v2 = v1 + (pool/10) + (e-v1)/(2*√10)
+            v_value = previous_v + (pool / cls.G) + ((e_value - previous_v) / (2 * cls.SQRT_G))
 
         return round(v_value, 2)
 

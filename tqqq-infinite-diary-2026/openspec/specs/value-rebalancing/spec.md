@@ -59,7 +59,7 @@ TBD - created by archiving change migrate-to-server-storage. Update Purpose afte
 #### Scenario: V2 계산 (기존 데이터 있음)
 - **WHEN** 사용자가 현재 주식수, 현금(Pool), 종가를 입력한다
 - **THEN** 평가금액 E를 계산한다 (종가 × 주식수)
-- **AND** V2 = V1 + pool/10 + (E-V1)/6.32 공식으로 V2를 계산한다
+- **AND** V2 = V1 + pool/10 + (E-V1)/(2*√10) 공식으로 V2를 계산한다
 - **AND** 소수점 둘째 자리까지 반올림하여 표시한다
 
 #### Scenario: V값 계산 과정 표시
@@ -67,7 +67,7 @@ TBD - created by archiving change migrate-to-server-storage. Update Purpose afte
 - **THEN** 계산 과정을 단계별로 표시한다:
   - 평가금액: E = 종가 × 주식수
   - V1 = 이전 V값
-  - V2 = V1 + pool/10 + (E-V1)/6.32
+  - V2 = V1 + pool/10 + (E-V1)/(2*√10)
 - **AND** 각 단계의 숫자를 명확히 보여준다
 
 #### Scenario: 가격 자동 조회
@@ -294,7 +294,7 @@ TBD - created by archiving change migrate-to-server-storage. Update Purpose afte
 #### Scenario: V값 공식 설명
 - **WHEN** 사용자가 V값 옆의 정보(ⓘ) 아이콘을 클릭한다
 - **THEN** V값 공식을 설명하는 툴팁을 표시한다:
-  - V2 = V1 + pool/10 + (E-V1)/6.32
+  - V2 = V1 + pool/10 + (E-V1)/(2*√10)
   - 각 변수의 의미
   - 계산 예시
 
