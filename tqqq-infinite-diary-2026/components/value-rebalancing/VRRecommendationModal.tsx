@@ -17,7 +17,7 @@ export function VRRecommendationModal({
   pool,
   onClose,
 }: VRRecommendationModalProps) {
-  const [sharesPerOrder, setSharesPerOrder] = useState<number>(1)
+  const [sharesPerOrder, setSharesPerOrder] = useState<number>(5)
   const [poolLimitPercent, setPoolLimitPercent] = useState<number>(80)
 
   const recommendation = VRRecommendationCalculator.calculateRecommendation(
