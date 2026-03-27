@@ -18,7 +18,7 @@ export function VRRecommendationModal({
   onClose,
 }: VRRecommendationModalProps) {
   const [sharesPerOrder, setSharesPerOrder] = useState<number>(5)
-  const [poolLimitPercent, setPoolLimitPercent] = useState<number>(80)
+  const [poolLimitPercent, setPoolLimitPercent] = useState<number>(50)
 
   const recommendation = VRRecommendationCalculator.calculateRecommendation(
     vValue,
@@ -80,7 +80,7 @@ export function VRRecommendationModal({
                     min="1"
                     max="100"
                     value={poolLimitPercent}
-                    onChange={(e) => setPoolLimitPercent(parseInt(e.target.value) || 80)}
+                    onChange={(e) => setPoolLimitPercent(parseInt(e.target.value) || 50)}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
