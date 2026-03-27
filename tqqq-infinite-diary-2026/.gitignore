@@ -38,3 +38,8 @@ public/data/*.json
 !public/data/.gitkeep
 
 /lib/generated/prisma
+
+# Prisma Database
+prisma/dev.db
+*.db
+*.db-journal
