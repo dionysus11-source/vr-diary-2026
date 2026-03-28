@@ -15,8 +15,34 @@ export function NewRoundModal({ isOpen, onClose, onSubmit }: NewRoundModalProps)
   const [price, setPrice] = useState("")
   const [quantity, setQuantity] = useState("")
   const [seedAmount, setSeedAmount] = useState("")
+  const [divisionCount, setDivisionCount] = useState("40")
   const [tryAmount, setTryAmount] = useState("")
   const [loading, setLoading] = useState(false)
+
+  const handleSeedAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value
+    setSeedAmount(val)
+    if (val && divisionCount) {
+      const seed = Number.parseFloat(val)
+      const div = Number.parseFloat(divisionCount)
+      if (seed > 0 && div > 0) {
+        // 소수점 2자리까지만 표시하고 필요 없는 0은 제거
+        setTryAmount(Number((seed / div).toFixed(2)).toString())
+      }
+    }
+  }
+
+  const handleDivisionCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value
+    setDivisionCount(val)
+    if (seedAmount && val) {
+      const seed = Number.parseFloat(seedAmount)
+      const div = Number.parseFloat(val)
+      if (seed > 0 && div > 0) {
+        setTryAmount(Number((seed / div).toFixed(2)).toString())
+      }
+    }
+  }
 
   if (!isOpen) return null
 
@@ -55,7 +81,9 @@ export function NewRoundModal({ isOpen, onClose, onSubmit }: NewRoundModalProps)
     setVersion("2.2")
     setPrice("")
     setQuantity("")
+    setQuantity("")
     setSeedAmount("")
+    setDivisionCount("40")
     setTryAmount("")
     onClose()
   }
@@ -115,19 +143,34 @@ export function NewRoundModal({ isOpen, onClose, onSubmit }: NewRoundModalProps)
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               {/* 총 투자 원금 */}
               <div>
                 <label className="block text-sm font-medium text-black dark:text-white mb-1">
-                  총 투자 원금 (선택)
+                  총 원금(선택)
                 </label>
                 <input
                   type="number"
                   step="0.01"
                   min="0"
                   value={seedAmount}
-                  onChange={(e) => setSeedAmount(e.target.value)}
+                  onChange={handleSeedAmountChange}
                   placeholder="예: 40000"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              {/* 분할 차수 (새로 추가) */}
+              <div>
+                <label className="block text-sm font-medium text-black dark:text-white mb-1">
+                  분할 차수
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  value={divisionCount}
+                  onChange={handleDivisionCountChange}
+                  placeholder="예: 40"
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -135,7 +178,7 @@ export function NewRoundModal({ isOpen, onClose, onSubmit }: NewRoundModalProps)
               {/* 1회 매수 시도액 */}
               <div>
                 <label className="block text-sm font-medium text-black dark:text-white mb-1">
-                  1회 시도액 (선택)
+                  1회 시도액(선택)
                 </label>
                 <input
                   type="number"

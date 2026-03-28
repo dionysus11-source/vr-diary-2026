@@ -131,8 +131,12 @@ export function calculateStarPoint(averagePrice: number, starPercentage: number)
  * 4. 전체 V4.0 가이드 정보 추출
  */
 export function getV4GuideInfo(round: Round): V4GuideInfo {
-  // 기본 40분할로 가정 (추후 설정으로 뺄 수 있음)
-  const splitCount: number = 40 
+  // 총 차수 계산 (기본값 40)
+  const tryAmountBase = round.tryAmount || (round.buys[0] ? round.buys[0].amount : 0)
+  const splitCount: number = (round.totalSeedAmount && tryAmountBase > 0)
+    ? (round.totalSeedAmount / tryAmountBase)
+    : 40
+
   const { tValue, remainingBudget, mode } = calculateV4State(round, splitCount)
   const averagePrice = round.averageBuyPrice || 0
   const isTQQQ = round.symbol.toUpperCase().includes("TQQQ")

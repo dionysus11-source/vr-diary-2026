@@ -42,29 +42,32 @@ export function calculateTValue(totalBuyAmount: number, tryAmount: number): numb
 
 /**
  * 별(Star) 퍼센트 계산
- * (10 - T/2)%
+ * 40차수 기준: 10 - T/2
+ * 스마트 차수 기준: 10 - (T * (10 / (총차수 / 2)))
  */
-export function calculateStarPercentage(tValue: number): number {
-  return 10 - tValue / 2
+export function calculateStarPercentage(tValue: number, totalSplits: number = 40): number {
+  const halfSplits = totalSplits / 2
+  return 10 - tValue * (10 / halfSplits)
 }
 
 /**
  * 현재 V2.2 가이드 상태 도출
  */
-export function getGuideState(round: Round, tValue: number): GuideState {
+export function getGuideState(round: Round, tValue: number, totalSplits: number = 40): GuideState {
   if (round.status === "completed" || round.remainingQuantity === 0) {
     return "completed"
   }
 
-  // 쿼터 손절모드 룰: 원금 소진 (T >= 39.1)
-  // 단, 매도 성립으로 보유 수량이 줄어들거나 하는 복귀 조건이 있으면 후반전 복귀.
-  // 이 시스템에서는 순수하게 T값만으로 쿼터손절 진입을 판단합니다.
-  // 사용자가 리셋(리밸런싱)을 하여 T값을 낮추지 않는 한 39.1 이상은 쿼터손절 가이드를 보여줍니다.
-  if (tValue >= 39.1) {
+  // 쿼터 손절모드 룰: 원금 거의 소진 (T >= 총차수 - 0.9)
+  // 기존 하드코딩 39.1은 40차수 기준 (40 - 0.9 = 39.1)
+  const stopLossThreshold = totalSplits - 0.9
+  if (tValue >= stopLossThreshold) {
     return "quarterStopLoss"
   }
   
-  if (tValue >= 20) {
+  // 후반전 룰: 총 차수의 절반 진입
+  const halfThreshold = totalSplits / 2
+  if (tValue >= halfThreshold) {
     return "secondHalf"
   }
   
@@ -88,8 +91,13 @@ export function getV22GuideInfo(round: Round): V22GuideInfo {
     : round.totalBuyAmount
     
   const tValue = calculateTValue(tValueInvestedAmount, tryAmount)
-  const starPercentage = calculateStarPercentage(tValue)
-  const state = getGuideState(round, tValue)
+  // 총 차수 계산 (기본값 40)
+  const totalSplits = (round.totalSeedAmount && tryAmount > 0)
+    ? (round.totalSeedAmount / tryAmount)
+    : 40
+
+  const starPercentage = calculateStarPercentage(tValue, totalSplits)
+  const state = getGuideState(round, tValue, totalSplits)
   const averagePrice = round.averageBuyPrice || 0
 
   // 매도 포인트: 평단가 + 평단가 * 별퍼센트 / 100 (소수점 2자리 반올림)
