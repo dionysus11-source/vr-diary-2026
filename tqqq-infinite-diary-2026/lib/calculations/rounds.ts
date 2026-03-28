@@ -1,17 +1,53 @@
 import { Round, Trade } from "@/types"
 
 /**
- * 평균 매수 단가 계산 (분할 매수 지원)
+ * 평균 매수 단가 계산 (이동평균법 지원: 매도 시 남은 평단가 유지, 소수점 셋째 자리에서 반올림)
  */
-export function calculateAverageBuyPrice(buys: Trade[]): number {
+export function calculateAverageBuyPrice(buys: Trade[], sells: Trade[] = []): number {
   if (buys.length === 0) return 0
+  
+  // 모든 거래를 시간순서(오름차순)로 정렬
+  // 날짜가 같을 경우 보통 매수 후 매도가 일어남을 가정하여 우선순위 부여
+  const allTrades = [
+    ...buys.map(b => ({ ...b, sortPriority: 0 })),
+    ...sells.map(s => ({ ...s, sortPriority: 1 }))
+  ].sort((a, b) => {
+    const timeA = new Date(a.date).getTime()
+    const timeB = new Date(b.date).getTime()
+    if (timeA === timeB) {
+      return a.sortPriority - b.sortPriority
+    }
+    return timeA - timeB
+  })
 
-  const totalAmount = buys.reduce((sum, buy) => sum + buy.amount, 0)
-  const totalQuantity = buys.reduce((sum, buy) => sum + buy.quantity, 0)
+  let currentQuantity = 0
+  let currentTotalCost = 0
 
-  return totalQuantity > 0 ? totalAmount / totalQuantity : 0
+  for (const trade of allTrades) {
+    if (trade.type === "buy") {
+      currentQuantity += trade.quantity
+      currentTotalCost += trade.amount
+    } else if (trade.type === "sell") {
+      if (currentQuantity > 0) {
+        const avgPrice = currentTotalCost / currentQuantity
+        currentQuantity -= trade.quantity
+        if (currentQuantity <= 0) {
+          currentQuantity = 0
+          currentTotalCost = 0
+        } else {
+          currentTotalCost = currentQuantity * avgPrice
+        }
+      }
+    }
+  }
+
+  if (currentQuantity > 0) {
+    const finalAvg = currentTotalCost / currentQuantity
+    return Math.round(finalAvg * 100) / 100
+  }
+
+  return 0
 }
-
 /**
  * 회차 총 매수 수량 계산
  */
@@ -111,7 +147,7 @@ export function updateRoundCalculations(
 
   const totalBuyAmount = calculateTotalBuyAmount(round.buys)
   const totalSellAmount = calculateTotalSellAmount(round.sells)
-  const averageBuyPrice = calculateAverageBuyPrice(round.buys)
+  const averageBuyPrice = calculateAverageBuyPrice(round.buys, round.sells)
 
   // 파라미터로 전달된 currentPrice가 있으면 사용, 없으면 round.currentPrice 사용
   const priceToUse = currentPrice !== undefined ? currentPrice : round.currentPrice
