@@ -70,7 +70,7 @@ export function V22Guide({ round }: V22GuideProps) {
                 </svg>
                 <div className="absolute right-0 w-64 p-2 mt-1 text-xs text-white bg-gray-900 rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10 shadow-lg border border-gray-700">
                   <p className="font-semibold mb-1">T값 계산 과정</p>
-                  <code className="block bg-gray-800 p-1 mb-1 rounded text-orange-300">현재 투자원금 / 1회 매수 시도액</code>
+                  <code className="block bg-gray-800 p-1 mb-1 rounded text-orange-300">현재 매입금액 / 1회 매수 시도액</code>
                   <p className="mb-1">{formatAmount(currentInvestedAmount)} / {formatAmount(tryAmount)} = {tryAmount > 0 ? (currentInvestedAmount / tryAmount).toFixed(2) : 0}</p>
                   <p className="text-gray-400">(소수점 셋째 자리에서 반올림)</p>
                 </div>

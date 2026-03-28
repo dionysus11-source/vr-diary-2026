@@ -20,7 +20,12 @@ export function RoundCard({ round, viewMode, onClick }: RoundCardProps) {
     ? round.remainingQuantity * (round.averageBuyPrice || 0)
     : round.totalBuyAmount
 
-  const progressRatio = hasSeed ? Math.min(currentInvestedAmount / round.totalSeedAmount!, 1) : 0
+  // T값(진행률) 표시용 투자원금 (단순 손익 합산 기준: 총매수 - 총매도)
+  const tValueInvestedAmount = round.remainingQuantity > 0
+    ? round.totalBuyAmount - (round.totalSellAmount || 0)
+    : round.totalBuyAmount
+
+  const progressRatio = hasSeed ? Math.min(tValueInvestedAmount / round.totalSeedAmount!, 1) : 0
   const progressPercent = (progressRatio * 100).toFixed(1)
 
   return (
@@ -92,7 +97,7 @@ export function RoundCard({ round, viewMode, onClick }: RoundCardProps) {
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-black dark:text-white">투자원금</span>
+            <span className="text-black dark:text-white">매입금액</span>
             <span className="font-medium">
               {formatAmount(currentInvestedAmount)}
             </span>
@@ -122,7 +127,7 @@ export function RoundCard({ round, viewMode, onClick }: RoundCardProps) {
               </div>
             </div>
             <div className="bg-white dark:bg-gray-800 p-2 rounded">
-              <div className="text-black dark:text-white text-xs">투자원금</div>
+              <div className="text-black dark:text-white text-xs">매입금액</div>
               <div className="font-medium text-sm">
                 {formatAmount(currentInvestedAmount)}
               </div>
