@@ -77,7 +77,7 @@ export function getGuideState(round: Round, tValue: number): GuideState {
 export function getV22GuideInfo(round: Round): V22GuideInfo {
   const tryAmount = getTryAmount(round)
   
-  // 매도(쿼터매도 등)가 발생하면 남아있는 수량에 대한 투자원금만 T값 계산에 반영
+  // 사용자 요청: 투자원금은 평단가(이동평균법) 기준의 현재 보유 금액으로 계산
   const currentInvestedAmount = round.remainingQuantity > 0 
     ? round.remainingQuantity * (round.averageBuyPrice || 0)
     : round.totalBuyAmount

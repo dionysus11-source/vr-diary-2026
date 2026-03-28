@@ -92,14 +92,9 @@ export function RoundCard({ round, viewMode, onClick }: RoundCardProps) {
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-black dark:text-white">총 매수/매도액</span>
+            <span className="text-black dark:text-white">투자원금</span>
             <span className="font-medium">
-              {formatAmount(round.totalBuyAmount)}
-              {round.totalSellAmount > 0 && (
-                <span className="text-xs text-gray-500 ml-1">
-                  / {formatAmount(round.totalSellAmount)}
-                </span>
-              )}
+              {formatAmount(currentInvestedAmount)}
             </span>
           </div>
           <div className="flex justify-between">
@@ -127,12 +122,9 @@ export function RoundCard({ round, viewMode, onClick }: RoundCardProps) {
               </div>
             </div>
             <div className="bg-white dark:bg-gray-800 p-2 rounded">
-              <div className="text-black dark:text-white text-xs">총 매수/매도액</div>
+              <div className="text-black dark:text-white text-xs">투자원금</div>
               <div className="font-medium text-sm">
-                {formatAmount(round.totalBuyAmount)}
-                {round.totalSellAmount > 0 && (
-                  <div className="text-xs text-gray-500">/ {formatAmount(round.totalSellAmount)}</div>
-                )}
+                {formatAmount(currentInvestedAmount)}
               </div>
             </div>
             {round.totalSellAmount > 0 && (
