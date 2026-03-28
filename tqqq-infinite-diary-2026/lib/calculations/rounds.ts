@@ -43,7 +43,7 @@ export function calculateAverageBuyPrice(buys: Trade[], sells: Trade[] = []): nu
 
   if (currentQuantity > 0) {
     const finalAvg = currentTotalCost / currentQuantity
-    return Math.round(finalAvg * 100) / 100
+    return finalAvg // 별도 반올림 없이 원본 소수점 그대로 반환 (원금 계산의 정확도를 위해, 화면 표출 시에만 formatPrice가 반올림함)
   }
 
   return 0
