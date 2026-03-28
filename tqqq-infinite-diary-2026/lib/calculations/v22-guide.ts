@@ -77,12 +77,17 @@ export function getGuideState(round: Round, tValue: number): GuideState {
 export function getV22GuideInfo(round: Round): V22GuideInfo {
   const tryAmount = getTryAmount(round)
   
-  // 사용자 요청: 투자원금은 평단가(이동평균법) 기준의 현재 보유 금액으로 계산
+  // 사용자 요청: 투자원금 화면 표시용으로는 평단가(이동평균법) 기준의 현재 보유 금액으로 계산
   const currentInvestedAmount = round.remainingQuantity > 0 
     ? round.remainingQuantity * (round.averageBuyPrice || 0)
     : round.totalBuyAmount
+
+  // T값(진행률) 계산용 투자원금은 '짬짜면' 요청에 따라 단순 손익 합산(총매수-총매도) 기준으로 따로 적용
+  const tValueInvestedAmount = round.remainingQuantity > 0
+    ? round.totalBuyAmount - (round.totalSellAmount || 0)
+    : round.totalBuyAmount
     
-  const tValue = calculateTValue(currentInvestedAmount, tryAmount)
+  const tValue = calculateTValue(tValueInvestedAmount, tryAmount)
   const starPercentage = calculateStarPercentage(tValue)
   const state = getGuideState(round, tValue)
   const averagePrice = round.averageBuyPrice || 0
